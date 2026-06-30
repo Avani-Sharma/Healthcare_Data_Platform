@@ -11,8 +11,6 @@ CREATE TABLE silver.DIM_FACILITY (
     eff_from DATE NOT NULL,
     eff_to DATE,
     is_current BIT NOT NULL DEFAULT 1,
-    source_file VARCHAR(255),
-    loaded_at DATETIME,
     CONSTRAINT PK_DIM_FACILITY PRIMARY KEY NONCLUSTERED (facility_sk) NOT ENFORCED
 )
 WITH (
@@ -32,9 +30,7 @@ INSERT INTO silver.DIM_FACILITY (
     facility_type,
     eff_from,
     eff_to,
-    is_current,
-    source_file,
-    loaded_at
+    is_current
 )
 SELECT DISTINCT
     provider_ccn,
@@ -49,10 +45,7 @@ SELECT DISTINCT
         ELSE 'UNKNOWN'
     END,
     CAST(GETDATE() AS DATE), 
-    NULL,         
-    1,         
-    'hospital.parquet',
-    GETDATE()   
+    NULL, 1
 FROM bronze_hospital;
 
 

@@ -7,9 +7,7 @@ CREATE TABLE silver.DIM_PHYSICIAN (
     state VARCHAR(10),                          
     eff_from DATE NOT NULL,                       
     eff_to DATE,                                
-    is_current BIT NOT NULL DEFAULT 1,          
-    source_file VARCHAR(255),                    
-    loaded_at DATETIME,                      
+    is_current BIT NOT NULL DEFAULT 1,                               
     CONSTRAINT PK_DIM_PHYSICIAN PRIMARY KEY NONCLUSTERED (physician_sk) NOT ENFORCED
 )
 WITH (
@@ -25,9 +23,7 @@ INSERT INTO silver.DIM_PHYSICIAN (
     state,
     eff_from,
     eff_to,
-    is_current,
-    source_file,
-    loaded_at
+    is_current
 )
 SELECT DISTINCT
     Prscrbr_NPI AS physician_id,
@@ -36,9 +32,7 @@ SELECT DISTINCT
     Prscrbr_State_Abrvtn AS state,
     CAST(GETDATE() AS DATE) AS eff_from, 
     NULL AS eff_to,         
-    1 AS is_current,         
-    'prescriber.parquet' AS source_file,
-    GETDATE() AS loaded_at   
+    1 AS is_current  
 FROM bronze_prescriber; 
 
 -- Verify Loaded Data

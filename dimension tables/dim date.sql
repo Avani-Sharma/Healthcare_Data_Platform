@@ -1,3 +1,4 @@
+DROP TABLE silver.DIM_DATE;
 -- Create Dimension Date Table
 CREATE TABLE silver.DIM_DATE (
     date_sk INT NOT NULL,              
@@ -7,7 +8,7 @@ CREATE TABLE silver.DIM_DATE (
     quarter INT NOT NULL,              
     month_name VARCHAR(20) NOT NULL,   
     is_holiday BIT NOT NULL DEFAULT 0, 
-    CONSTRAINT PK_DIM_DATE PRIMARY KEY NONCLUSTERED (date_sk) NOT ENFORCED
+    CONSTRAINT PK_DIM_DATE PRIMARY KEY  NONCLUSTERED (date_sk) NOT ENFORCED
 )
 WITH (
     DISTRIBUTION = REPLICATE, 

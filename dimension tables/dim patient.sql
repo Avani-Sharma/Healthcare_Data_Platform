@@ -12,8 +12,6 @@ CREATE TABLE silver.DIM_PATIENT (
     eff_from DATE NOT NULL,
     eff_to DATE,
     is_current BIT NOT NULL DEFAULT 1,
-    source_file VARCHAR(255),
-    loaded_at DATETIME,
     CONSTRAINT PK_DIM_PATIENT PRIMARY KEY NONCLUSTERED (patient_sk) NOT ENFORCED
 )
 WITH (
@@ -31,9 +29,7 @@ INSERT INTO silver.DIM_PATIENT (
     insurance_tier,
     eff_from,
     eff_to,
-    is_current,
-    source_file,
-    loaded_at
+    is_current
 )
 SELECT 
     patient_id,
@@ -43,9 +39,7 @@ SELECT
     insurance_tier,          
     CAST(GETDATE() AS DATE) AS eff_from, 
     NULL AS eff_to,         
-    1 AS is_current,         
-    'patient.csv' AS source_file, 
-    GETDATE() AS loaded_at   
+    1 AS is_current 
 FROM bronze_patient;             
 
 

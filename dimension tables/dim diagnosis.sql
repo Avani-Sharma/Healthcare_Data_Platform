@@ -8,9 +8,7 @@ CREATE TABLE silver.DIM_DIAGNOSIS (
     eff_from DATE NOT NULL,
     eff_to DATE,
     is_current BIT NOT NULL DEFAULT 1,
-    source_file VARCHAR(255),
-    loaded_at DATETIME,
-    CONSTRAINT PK_DIM_DIAGNOSIS PRIMARY KEY NONCLUSTERED (diag_sk) NOT ENFORCED
+    CONSTRAINT PK_DIM_DIAGNOSIS PRIMARY KEY NONCLUSTERED (diag_sk) NOT ENFORCED 
 )
 WITH (
     DISTRIBUTION = REPLICATE, 
@@ -25,9 +23,7 @@ INSERT INTO silver.DIM_DIAGNOSIS (
     severity_tier,
     eff_from,
     eff_to,
-    is_current,
-    source_file,
-    loaded_at
+    is_current
 )
 SELECT DISTINCT
     ICD_Code,
@@ -39,10 +35,7 @@ SELECT DISTINCT
         ELSE 'LOW'
     END,
     CAST(GETDATE() AS DATE), 
-    NULL,         
-    1,         
-    'icd.csv',
-    GETDATE()   
+    NULL, 1  
 FROM Bronze_ICD;
 
 
