@@ -1,10 +1,6 @@
 {
 	"name": "patientjsondata",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "externalregex_ls",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
