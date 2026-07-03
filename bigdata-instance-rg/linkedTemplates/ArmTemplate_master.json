@@ -139,6 +139,9 @@
 					"to_synapse_password": {
 						"value": "[parameters('to_synapse_password')]"
 					},
+					"MySql_Local_SHIR_password": {
+						"value": "[parameters('MySql_Local_SHIR_password')]"
+					},
 					"dbstore12_ls_properties_typeProperties_url": {
 						"value": "[parameters('dbstore12_ls_properties_typeProperties_url')]"
 					},
@@ -168,47 +171,6 @@
 					},
 					"to_synapse_properties_typeProperties_userName": {
 						"value": "[parameters('to_synapse_properties_typeProperties_userName')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "bigdata-instance-rg_ArmTemplate_1",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2024-03-01",
-			"properties": {
-				"mode": "incremental",
-				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"factoryName": {
-						"value": "[parameters('factoryName')]"
-					}
-				}
-			},
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'bigdata-instance-rg_ArmTemplate_0')]"
-			]
-		},
-		{
-			"name": "bigdata-instance-rg_ArmTemplate_2",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2024-03-01",
-			"properties": {
-				"mode": "incremental",
-				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"factoryName": {
-						"value": "[parameters('factoryName')]"
-					},
-					"MySql_Local_SHIR_password": {
-						"value": "[parameters('MySql_Local_SHIR_password')]"
 					},
 					"MySql_Local_SHIR_properties_typeProperties_server": {
 						"value": "[parameters('MySql_Local_SHIR_properties_typeProperties_server')]"
@@ -221,9 +183,7 @@
 					}
 				}
 			},
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'bigdata-instance-rg_ArmTemplate_1')]"
-			]
+			"dependsOn": []
 		}
 	]
 }
