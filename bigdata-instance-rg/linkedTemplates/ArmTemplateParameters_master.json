@@ -5,68 +5,23 @@
 		"factoryName": {
 			"value": "bigdata-instance-rg"
 		},
-		"AzureBlobStorage1_connectionString": {
+		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
-		"MySql_Local_SHIR_password": {
+		"mysql_ls_password": {
 			"value": ""
 		},
-		"dbstore12_ls_accountKey": {
-			"value": ""
-		},
-		"externalregex_ls_accountKey": {
-			"value": ""
-		},
-		"jsontocsv_accountKey": {
-			"value": ""
-		},
-		"junestoragereg_accountKey": {
-			"value": ""
-		},
-		"junestorageregex_password": {
-			"value": ""
-		},
-		"to_synapse_password": {
-			"value": ""
-		},
-		"MySql_Local_SHIR_properties_typeProperties_server": {
-			"value": "localhost"
-		},
-		"MySql_Local_SHIR_properties_typeProperties_database": {
-			"value": "healthcare_db"
-		},
-		"MySql_Local_SHIR_properties_typeProperties_username": {
-			"value": "root"
-		},
-		"dbstore12_ls_properties_typeProperties_url": {
-			"value": "https://dbstore12.dfs.core.windows.net/"
-		},
-		"externalregex_ls_properties_typeProperties_url": {
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://externalregex.dfs.core.windows.net/"
 		},
-		"jsontocsv_properties_typeProperties_url": {
-			"value": "https://junestoragereg.dfs.core.windows.net/"
+		"mysql_ls_properties_typeProperties_server": {
+			"value": "127.0.0.1"
 		},
-		"junestoragereg_properties_typeProperties_url": {
-			"value": "https://junestoragereg.dfs.core.windows.net/"
+		"mysql_ls_properties_typeProperties_database": {
+			"value": "healthcare_db"
 		},
-		"junestorageregex_properties_typeProperties_server": {
-			"value": "bigdata-workspace.sql.azuresynapse.net"
-		},
-		"junestorageregex_properties_typeProperties_database": {
-			"value": "avani"
-		},
-		"junestorageregex_properties_typeProperties_userName": {
-			"value": "sqladminuser"
-		},
-		"to_synapse_properties_typeProperties_server": {
-			"value": "bigdata-workspace.sql.azuresynapse.net"
-		},
-		"to_synapse_properties_typeProperties_database": {
-			"value": "avani"
-		},
-		"to_synapse_properties_typeProperties_userName": {
-			"value": "sqladminuser"
+		"mysql_ls_properties_typeProperties_username": {
+			"value": "root"
 		},
 		"containerUri": {
 			"value": ""
