@@ -1,0 +1,145 @@
+{
+	"name": "patient_flow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Jsondata",
+						"type": "DatasetReference"
+					},
+					"name": "source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "patientjsondata",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "PatientFlatten"
+				},
+				{
+					"name": "PatientFilter"
+				},
+				{
+					"name": "PatientExtraCol"
+				},
+				{
+					"name": "PatientAggregate"
+				},
+				{
+					"name": "InsuranceFlatten"
+				},
+				{
+					"name": "InsuranceFilter"
+				},
+				{
+					"name": "InsuranceExtraCol"
+				},
+				{
+					"name": "InsuranceAggregate"
+				},
+				{
+					"name": "InsuranceExtraCol2"
+				},
+				{
+					"name": "InsuranceSelect"
+				},
+				{
+					"name": "PatientSelect"
+				},
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          resourceType as string,",
+				"          type as string,",
+				"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> source",
+				"source foldDown(unroll(entry, entry),",
+				"     mapColumn(",
+				"          resourceType = entry.resource.resourceType,",
+				"          Patientid = entry.resource.id,",
+				"          gender = entry.resource.gender,",
+				"          birthDate = entry.resource.birthDate",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> PatientFlatten",
+				"PatientFlatten filter(resourceType == 'Patient') ~> PatientFilter",
+				"PatientFilter derive(patient_id = Patientid,",
+				"          gender = gender,",
+				"          birth_date = toDate(birthDate, 'yyyy-MM-dd'),",
+				"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> PatientExtraCol",
+				"PatientExtraCol select(mapColumn(",
+				"          patient_id,",
+				"          gender,",
+				"          birth_date,",
+				"          age_band",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> PatientAggregate",
+				"source foldDown(unroll(entry),",
+				"     mapColumn(",
+				"          fullUrl = entry.fullUrl,",
+				"          resource = entry.resource,",
+				"          request = entry.request",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> InsuranceFlatten",
+				"InsuranceFlatten filter(resource.resourceType == 'Claim') ~> InsuranceFilter",
+				"InsuranceFilter derive(insurer = byPath('resource.insurance[1].coverage.display'),",
+				"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', ''),",
+				"          claim_date = byPath('resource.created')) ~> InsuranceExtraCol",
+				"InsuranceExtraCol aggregate(groupBy(patient_ref),",
+				"     latest_claim_date = max(claim_date),",
+				"          insurance_cover_display = first(insurer),",
+				"          claim_id = first(byPath('resource.id'))) ~> InsuranceAggregate",
+				"InsuranceAggregate derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> InsuranceExtraCol2",
+				"InsuranceExtraCol2 select(mapColumn(",
+				"          patient_ref,",
+				"          latest_claim_date,",
+				"          insurance_cover_display,",
+				"          claim_id,",
+				"          insurance_tier",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> InsuranceSelect",
+				"PatientAggregate select(mapColumn(",
+				"          patient_id,",
+				"          gender,",
+				"          birth_date,",
+				"          age_band",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> PatientSelect",
+				"PatientSelect, InsuranceSelect join(patient_id == patient_ref,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['final_patient_insurance_data.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"name": "ds_source_json_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "junestoragereg",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "part-00000-7ce77576-90ce-4323-998b-53013d6127be-c000.csv",
+				"folderPath": "csvfolder",
+				"fileSystem": "bigdata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "resourceType",
+				"type": "String"
+			},
+			{
+				"name": "type",
+				"type": "String"
+			},
+			{
+				"name": "patientid",
+				"type": "String"
+			},
+			{
+				"name": "gender",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

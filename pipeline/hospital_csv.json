@@ -1,0 +1,412 @@
+{
+	"name": "hospital_csv",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "rpt_rec_num",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "rpt_rec_num",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Provider CCN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Provider_CCN",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Facility Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Facility_Name",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Street Address",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Street_Address",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "City",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "City",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "State Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "State_Code",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Zip Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Zip_Code",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "County",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Medicare CBSA Number",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Medicare_CBSA_Number",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Rural versus Urban",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Rural_versus_Urban",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Fiscal Year Begin Date",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Fiscal_Year_Begin_Date",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Fiscal Year End Date",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Fiscal_Year_End_Date",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Type of Control",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Type_of_Control",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Number of Beds",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Number_of_Beds",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total Bed Days Available",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Bed_Days_Available",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total Days Title XVIII",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Days_Title_XVIII",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total Days Total",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Days_Total",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total Discharges Title XVIII",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Discharges_Title_XVIII",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total Discharges Total",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Discharges_Total",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Inpatient Revenue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Inpatient_Revenue",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Outpatient Revenue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Outpatient_Revenue",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total Patient Revenue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_Patient_Revenue",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Less Contractual Allowance and Discounts on Patients' Accounts",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Less_Contractual_Allowance_and_Discounts_on_Patients_Accounts",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Net Patient Revenue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Net_Patient_Revenue",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Less Total Operating Expense",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Less_Total_Operating_Expense",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Net Income from Service to Patients",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Net_Income_from_Service_to_Patients",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Net Income",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Net_Income",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "DRG Amounts Other Than Outlier Payments",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DRG_Amounts_Other_Than_Outlier_Payments",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Total IME Payment",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Total_IME_Payment",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Allowable DSH Percentage",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Allowable_DSH_Percentage",
+									"physicalType": "UTF8"
+								}
+							},
+							{
+								"source": {
+									"name": "Cost To Charge Ratio",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Cost_To_Charge_Ratio",
+									"physicalType": "UTF8"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Parquet4",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-06-27T18:59:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

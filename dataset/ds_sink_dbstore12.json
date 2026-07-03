@@ -1,0 +1,25 @@
+{
+	"name": "ds_sink_dbstore12",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "dbstore12_ls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "icd10cm_codes_2025.csv",
+				"folderPath": "csvfolder",
+				"fileSystem": "dbstore12-file"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

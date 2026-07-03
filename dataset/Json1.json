@@ -1,0 +1,300 @@
+{
+	"name": "Json1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "junestoragereg",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Abdul218_Harris789_b0a06ead-cc42-aa48-dad6-841d4aa679fa.json",
+				"folderPath": "jsonfolder",
+				"fileSystem": "bigdata"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"resourceType": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"entry": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"fullUrl": {
+								"type": "string"
+							},
+							"resource": {
+								"type": "object",
+								"properties": {
+									"resourceType": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string"
+									},
+									"meta": {
+										"type": "object",
+										"properties": {
+											"profile": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"text": {
+										"type": "object",
+										"properties": {
+											"status": {
+												"type": "string"
+											},
+											"div": {
+												"type": "string"
+											}
+										}
+									},
+									"extension": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"url": {
+													"type": "string"
+												},
+												"extension": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"url": {
+																"type": "string"
+															},
+															"valueCoding": {
+																"type": "object",
+																"properties": {
+																	"system": {
+																		"type": "string"
+																	},
+																	"code": {
+																		"type": "string"
+																	},
+																	"display": {
+																		"type": "string"
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"identifier": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"system": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"name": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"use": {
+													"type": "string"
+												},
+												"family": {
+													"type": "string"
+												},
+												"given": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
+												},
+												"prefix": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									},
+									"telecom": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"system": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"use": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"gender": {
+										"type": "string"
+									},
+									"birthDate": {
+										"type": "string"
+									},
+									"deceasedDateTime": {
+										"type": "string"
+									},
+									"address": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"extension": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"url": {
+																"type": "string"
+															},
+															"extension": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"url": {
+																			"type": "string"
+																		},
+																		"valueDecimal": {
+																			"type": "number"
+																		}
+																	}
+																}
+															}
+														}
+													}
+												},
+												"line": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
+												},
+												"city": {
+													"type": "string"
+												},
+												"state": {
+													"type": "string"
+												},
+												"postalCode": {
+													"type": "string"
+												},
+												"country": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"maritalStatus": {
+										"type": "object",
+										"properties": {
+											"coding": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"system": {
+															"type": "string"
+														},
+														"code": {
+															"type": "string"
+														},
+														"display": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"text": {
+												"type": "string"
+											}
+										}
+									},
+									"multipleBirthBoolean": {
+										"type": "boolean"
+									},
+									"communication": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"language": {
+													"type": "object",
+													"properties": {
+														"coding": {
+															"type": "array",
+															"items": {
+																"type": "object",
+																"properties": {
+																	"system": {
+																		"type": "string"
+																	},
+																	"code": {
+																		"type": "string"
+																	},
+																	"display": {
+																		"type": "string"
+																	}
+																}
+															}
+														},
+														"text": {
+															"type": "string"
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							"request": {
+								"type": "object",
+								"properties": {
+									"method": {
+										"type": "string"
+									},
+									"url": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

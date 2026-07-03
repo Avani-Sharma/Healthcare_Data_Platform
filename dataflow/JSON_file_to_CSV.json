@@ -1,0 +1,70 @@
+{
+	"name": "JSON_file_to_CSV",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "jsonfile",
+						"type": "DatasetReference"
+					},
+					"name": "complexJSON"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "jsontocsv",
+						"type": "DatasetReference"
+					},
+					"name": "jsoncsv"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatjsonfile"
+				},
+				{
+					"name": "filterjsonfile"
+				},
+				{
+					"name": "derivedjsoncolumn"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          resourceType as string,",
+				"          type as string,",
+				"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> complexJSON",
+				"complexJSON foldDown(unroll(entry, entry),",
+				"     mapColumn(",
+				"          Entry_Resource_Type = entry.resource.resourceType,",
+				"          patient_id = entry.resource.id,",
+				"          Gender = entry.resource.gender,",
+				"          birth_date = entry.resource.birthDate",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatjsonfile",
+				"flatjsonfile filter(Entry_Resource_Type == 'Patient') ~> filterjsonfile",
+				"filterjsonfile derive(age_band = case(     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 18, '0-17',     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 35, '18-34',     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 50, '35-49',     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 65, '50-64',     '65+' )) ~> derivedjsoncolumn",
+				"derivedjsoncolumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ICD10_Code as string,",
+				"          Description as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> jsoncsv"
+			]
+		}
+	}
+}

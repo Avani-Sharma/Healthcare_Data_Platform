@@ -1,0 +1,16 @@
+{
+	"name": "MySql_local",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "MySql_Local_SHIR",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "mup_data"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

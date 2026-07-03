@@ -1,0 +1,15 @@
+{
+	"name": "bigdata-instance-rg",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6217b40f-170f-4b16-bb52-c17b3f05464a",
+		"tenantId": "9e90a333-8e7d-4206-987b-8ec7e86148e7"
+	}
+}
