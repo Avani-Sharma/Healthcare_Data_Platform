@@ -372,7 +372,7 @@
 											"physicalType": "String"
 										},
 										"sink": {
-											"name": "Net_Income _from_Service_to_Patients",
+											"name": "Net_Income_from_Service_to_Patients",
 											"physicalType": "UTF8"
 										}
 									},
