@@ -1,0 +1,20 @@
+{
+	"name": "csv_to_parquet_hospital",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Landing/hospital",
+				"fileSystem": "healthcare-project"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

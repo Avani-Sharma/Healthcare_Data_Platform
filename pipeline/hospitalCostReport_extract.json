@@ -1,9 +1,9 @@
 {
-	"name": "prescriber_extract",
+	"name": "hospitalCostReport_extract",
 	"properties": {
 		"activities": [
 			{
-				"name": "convert_mysql_to_parquet",
+				"name": "convert_csv_to_parquet",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "MySqlSource"
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
 					},
 					"sink": {
 						"type": "ParquetSink",
@@ -39,13 +47,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "mysql",
+						"referenceName": "csv_hospital",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "mysql_to_parquet",
+						"referenceName": "csv_to_parquet_hospital",
 						"type": "DatasetReference"
 					}
 				]
