@@ -1,0 +1,229 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "bigdata-instance-rg"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"MySql_Local_SHIR_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'MySql_Local_SHIR'"
+		},
+		"dbstore12_ls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'dbstore12_ls'"
+		},
+		"externalregex_ls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'externalregex_ls'"
+		},
+		"jsontocsv_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'jsontocsv'"
+		},
+		"junestoragereg_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'junestoragereg'"
+		},
+		"junestorageregex_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'junestorageregex'"
+		},
+		"to_synapse_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'to_synapse'"
+		},
+		"MySql_Local_SHIR_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "localhost"
+		},
+		"MySql_Local_SHIR_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "healthcare_db"
+		},
+		"MySql_Local_SHIR_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "root"
+		},
+		"dbstore12_ls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dbstore12.dfs.core.windows.net/"
+		},
+		"externalregex_ls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://externalregex.dfs.core.windows.net/"
+		},
+		"jsontocsv_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://junestoragereg.dfs.core.windows.net/"
+		},
+		"junestoragereg_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://junestoragereg.dfs.core.windows.net/"
+		},
+		"junestorageregex_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "bigdata-workspace.sql.azuresynapse.net"
+		},
+		"junestorageregex_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "avani"
+		},
+		"junestorageregex_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladminuser"
+		},
+		"to_synapse_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "bigdata-workspace.sql.azuresynapse.net"
+		},
+		"to_synapse_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "avani"
+		},
+		"to_synapse_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladminuser"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "bigdata-instance-rg_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"dbstore12_ls_accountKey": {
+						"value": "[parameters('dbstore12_ls_accountKey')]"
+					},
+					"externalregex_ls_accountKey": {
+						"value": "[parameters('externalregex_ls_accountKey')]"
+					},
+					"jsontocsv_accountKey": {
+						"value": "[parameters('jsontocsv_accountKey')]"
+					},
+					"junestoragereg_accountKey": {
+						"value": "[parameters('junestoragereg_accountKey')]"
+					},
+					"junestorageregex_password": {
+						"value": "[parameters('junestorageregex_password')]"
+					},
+					"to_synapse_password": {
+						"value": "[parameters('to_synapse_password')]"
+					},
+					"dbstore12_ls_properties_typeProperties_url": {
+						"value": "[parameters('dbstore12_ls_properties_typeProperties_url')]"
+					},
+					"externalregex_ls_properties_typeProperties_url": {
+						"value": "[parameters('externalregex_ls_properties_typeProperties_url')]"
+					},
+					"jsontocsv_properties_typeProperties_url": {
+						"value": "[parameters('jsontocsv_properties_typeProperties_url')]"
+					},
+					"junestoragereg_properties_typeProperties_url": {
+						"value": "[parameters('junestoragereg_properties_typeProperties_url')]"
+					},
+					"junestorageregex_properties_typeProperties_server": {
+						"value": "[parameters('junestorageregex_properties_typeProperties_server')]"
+					},
+					"junestorageregex_properties_typeProperties_database": {
+						"value": "[parameters('junestorageregex_properties_typeProperties_database')]"
+					},
+					"junestorageregex_properties_typeProperties_userName": {
+						"value": "[parameters('junestorageregex_properties_typeProperties_userName')]"
+					},
+					"to_synapse_properties_typeProperties_server": {
+						"value": "[parameters('to_synapse_properties_typeProperties_server')]"
+					},
+					"to_synapse_properties_typeProperties_database": {
+						"value": "[parameters('to_synapse_properties_typeProperties_database')]"
+					},
+					"to_synapse_properties_typeProperties_userName": {
+						"value": "[parameters('to_synapse_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "bigdata-instance-rg_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'bigdata-instance-rg_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "bigdata-instance-rg_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"MySql_Local_SHIR_password": {
+						"value": "[parameters('MySql_Local_SHIR_password')]"
+					},
+					"MySql_Local_SHIR_properties_typeProperties_server": {
+						"value": "[parameters('MySql_Local_SHIR_properties_typeProperties_server')]"
+					},
+					"MySql_Local_SHIR_properties_typeProperties_database": {
+						"value": "[parameters('MySql_Local_SHIR_properties_typeProperties_database')]"
+					},
+					"MySql_Local_SHIR_properties_typeProperties_username": {
+						"value": "[parameters('MySql_Local_SHIR_properties_typeProperties_username')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'bigdata-instance-rg_ArmTemplate_1')]"
+			]
+		}
+	]
+}

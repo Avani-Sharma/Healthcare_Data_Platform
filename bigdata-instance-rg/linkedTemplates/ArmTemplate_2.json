@@ -1,0 +1,1345 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "bigdata-instance-rg"
+		},
+		"MySql_Local_SHIR_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'MySql_Local_SHIR'"
+		},
+		"MySql_Local_SHIR_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "localhost"
+		},
+		"MySql_Local_SHIR_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "healthcare_db"
+		},
+		"MySql_Local_SHIR_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "root"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/patientjsondata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "externalregex_ls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "json",
+						"fileSystem": "healthcare-project"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/to_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestoragereg",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "icd10cm_codes_2025.csv",
+						"folderPath": "csvfolder",
+						"fileSystem": "bigdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/toparquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestoragereg",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "csvfolder",
+						"fileSystem": "bigdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ICD10_Code",
+						"type": "String"
+					},
+					{
+						"name": "Description",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/txt')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestoragereg",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "txtfolder",
+						"fileSystem": "bigdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/txt_dataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestoragereg",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "icd10cm_codes_2025.txt",
+						"folderPath": "txtfolder",
+						"fileSystem": "bigdata"
+					},
+					"columnDelimiter": "\t",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/txttocsv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestoragereg",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "csvfolder",
+						"fileSystem": "bigdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "transaction_id",
+						"type": "String"
+					},
+					{
+						"name": "store_city",
+						"type": "String"
+					},
+					{
+						"name": "quantity",
+						"type": "String"
+					},
+					{
+						"name": "unit_price",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MySql_Local_SHIR')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "MySql",
+				"typeProperties": {
+					"server": "[parameters('MySql_Local_SHIR_properties_typeProperties_server')]",
+					"port": 3306,
+					"database": "[parameters('MySql_Local_SHIR_properties_typeProperties_database')]",
+					"username": "[parameters('MySql_Local_SHIR_properties_typeProperties_username')]",
+					"sslMode": 1,
+					"useSystemTrustStore": 0,
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('MySql_Local_SHIR_password')]"
+					},
+					"driverVersion": "v2"
+				},
+				"connectVia": {
+					"referenceName": "localshir",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hospital_csv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "rpt_rec_num",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "rpt_rec_num",
+											"type": "String",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Provider CCN",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Provider_CCN",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Facility Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Facility_Name",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Street Address",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Street_Address",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "City",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "City",
+											"type": "String",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "State Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "State_Code",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Zip Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Zip_Code",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "County",
+											"type": "String",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Medicare CBSA Number",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Medicare_CBSA_Number",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Rural versus Urban",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Rural_versus_Urban",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Fiscal Year Begin Date",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Fiscal_Year_Begin_Date",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Fiscal Year End Date",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Fiscal_Year_End_Date",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Type of Control",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Type_of_Control",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Number of Beds",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Number_of_Beds",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Bed Days Available",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_Bed_Days_Available",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Days Title XVIII",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_Days_Title_XVIII",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Days Total",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_Days_Total",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Discharges Title XVIII",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_Discharges_Title_XVIII",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Discharges Total",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_Discharges_Total",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Inpatient Revenue",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Inpatient_Revenue",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Outpatient Revenue",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Outpatient_Revenue",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total Patient Revenue",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_Patient_Revenue",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Less Contractual Allowance and Discounts on Patients' Accounts",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Less_Contractual_Allowance_and_Discounts_on_Patients_Accounts",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Net Patient Revenue",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Net_Patient_Revenue",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Less Total Operating Expense",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Less_Total_Operating_Expense",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Net Income from Service to Patients",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Net_Income_from_Service_to_Patients",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Net Income",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Net_Income",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "DRG Amounts Other Than Outlier Payments",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DRG_Amounts_Other_Than_Outlier_Payments",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Total IME Payment",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Total_IME_Payment",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Allowable DSH Percentage",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Allowable_DSH_Percentage",
+											"physicalType": "UTF8"
+										}
+									},
+									{
+										"source": {
+											"name": "Cost To Charge Ratio",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Cost_To_Charge_Ratio",
+											"physicalType": "UTF8"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet4",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-06-27T18:59:19Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/icd_txt')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet5",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-06-27T19:14:41Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MySql_local')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "MySql_Local_SHIR",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MySqlTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "mup_data"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MySql_Local_SHIR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/JSON_file_to_CSV')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "jsonfile",
+								"type": "DatasetReference"
+							},
+							"name": "complexJSON"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "jsontocsv",
+								"type": "DatasetReference"
+							},
+							"name": "jsoncsv"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatjsonfile"
+						},
+						{
+							"name": "filterjsonfile"
+						},
+						{
+							"name": "derivedjsoncolumn"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          resourceType as string,",
+						"          type as string,",
+						"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> complexJSON",
+						"complexJSON foldDown(unroll(entry, entry),",
+						"     mapColumn(",
+						"          Entry_Resource_Type = entry.resource.resourceType,",
+						"          patient_id = entry.resource.id,",
+						"          Gender = entry.resource.gender,",
+						"          birth_date = entry.resource.birthDate",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatjsonfile",
+						"flatjsonfile filter(Entry_Resource_Type == 'Patient') ~> filterjsonfile",
+						"filterjsonfile derive(age_band = case(     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 18, '0-17',     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 35, '18-34',     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 50, '35-49',     floor(monthsBetween(currentDate(), toDate(birth_date, 'yyyy-MM-dd')) / 12) < 65, '50-64',     '65+' )) ~> derivedjsoncolumn",
+						"derivedjsoncolumn sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ICD10_Code as string,",
+						"          Description as string",
+						"     ),",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> jsoncsv"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "junestoragereg_bigdata_csvfolder",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "junestoragereg_bigdata_csvfolder",
+								"type": "DatasetReference"
+							},
+							"name": "parquetdestination"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          transaction_id as string,",
+						"          store_city as string,",
+						"          quantity as string,",
+						"          unit_price as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 select(mapColumn(",
+						"          store_city,",
+						"          quantity,",
+						"          unit_price",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          transaction_id as string,",
+						"          store_city as string,",
+						"          quantity as string,",
+						"          unit_price as string",
+						"     ),",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> parquetdestination"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/json_to_csv')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "complexjson",
+								"type": "DatasetReference"
+							},
+							"name": "complexjson"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "junestoragereg_bigdata_csvfolder",
+								"type": "DatasetReference"
+							},
+							"name": "jsontocsv"
+						}
+					],
+					"transformations": [
+						{
+							"name": "jsonarrayflatten"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          resourceType as string,",
+						"          type as string,",
+						"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, deceasedDateTime as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> complexjson",
+						"complexjson foldDown(unroll(entry, entry),",
+						"     mapColumn(",
+						"          resourceType,",
+						"          type,",
+						"          patientid = entry.resource.extension.extension.valueCoding.system,",
+						"          gender = entry.resource.gender",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> jsonarrayflatten",
+						"jsonarrayflatten sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          transaction_id as string,",
+						"          store_city as string,",
+						"          quantity as string,",
+						"          unit_price as string",
+						"     ),",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> jsontocsv"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/patient_flow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Jsondata",
+								"type": "DatasetReference"
+							},
+							"name": "source"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "patientjsondata",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "PatientFlatten"
+						},
+						{
+							"name": "PatientFilter"
+						},
+						{
+							"name": "PatientExtraCol"
+						},
+						{
+							"name": "PatientAggregate"
+						},
+						{
+							"name": "InsuranceFlatten"
+						},
+						{
+							"name": "InsuranceFilter"
+						},
+						{
+							"name": "InsuranceExtraCol"
+						},
+						{
+							"name": "InsuranceAggregate"
+						},
+						{
+							"name": "InsuranceExtraCol2"
+						},
+						{
+							"name": "InsuranceSelect"
+						},
+						{
+							"name": "PatientSelect"
+						},
+						{
+							"name": "join1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          resourceType as string,",
+						"          type as string,",
+						"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> source",
+						"source foldDown(unroll(entry, entry),",
+						"     mapColumn(",
+						"          resourceType = entry.resource.resourceType,",
+						"          Patientid = entry.resource.id,",
+						"          gender = entry.resource.gender,",
+						"          birthDate = entry.resource.birthDate",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> PatientFlatten",
+						"PatientFlatten filter(resourceType == 'Patient') ~> PatientFilter",
+						"PatientFilter derive(patient_id = Patientid,",
+						"          gender = gender,",
+						"          birth_date = toDate(birthDate, 'yyyy-MM-dd'),",
+						"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> PatientExtraCol",
+						"PatientExtraCol select(mapColumn(",
+						"          patient_id,",
+						"          gender,",
+						"          birth_date,",
+						"          age_band",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> PatientAggregate",
+						"source foldDown(unroll(entry),",
+						"     mapColumn(",
+						"          fullUrl = entry.fullUrl,",
+						"          resource = entry.resource,",
+						"          request = entry.request",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> InsuranceFlatten",
+						"InsuranceFlatten filter(resource.resourceType == 'Claim') ~> InsuranceFilter",
+						"InsuranceFilter derive(insurer = byPath('resource.insurance[1].coverage.display'),",
+						"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', ''),",
+						"          claim_date = byPath('resource.created')) ~> InsuranceExtraCol",
+						"InsuranceExtraCol aggregate(groupBy(patient_ref),",
+						"     latest_claim_date = max(claim_date),",
+						"          insurance_cover_display = first(insurer),",
+						"          claim_id = first(byPath('resource.id'))) ~> InsuranceAggregate",
+						"InsuranceAggregate derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> InsuranceExtraCol2",
+						"InsuranceExtraCol2 select(mapColumn(",
+						"          patient_ref,",
+						"          latest_claim_date,",
+						"          insurance_cover_display,",
+						"          claim_id,",
+						"          insurance_tier",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> InsuranceSelect",
+						"PatientAggregate select(mapColumn(",
+						"          patient_id,",
+						"          gender,",
+						"          birth_date,",
+						"          age_band",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> PatientSelect",
+						"PatientSelect, InsuranceSelect join(patient_id == patient_ref,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['final_patient_insurance_data.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/patientjsondata')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/json_extract')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "json_to_csv_flw",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "json_to_csv",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"complexjson": {},
+									"jsontocsv": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "json_to_csv_flw",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_source_json_csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedTexts",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-06-24T08:32:01Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/json_to_csv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/mysql_to_parquet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "MySqlSource"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "MySql_local",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-06-26T07:44:52Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/MySql_local')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/syntheria_json')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "patient_flow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "patient_flow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-06-27T17:05:20Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/patient_flow')]"
+			]
+		}
+	]
+}
