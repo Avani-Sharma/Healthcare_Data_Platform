@@ -14,9 +14,9 @@
 				"folderPath": "icd_txt",
 				"fileSystem": "bigdata"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "\t",
 			"escapeChar": "\\",
-			"firstRowAsHeader": true,
+			"firstRowAsHeader": false,
 			"quoteChar": "\""
 		},
 		"schema": [
