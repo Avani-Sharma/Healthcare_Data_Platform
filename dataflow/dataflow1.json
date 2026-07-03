@@ -1,0 +1,53 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Json1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          resourceType as string,",
+				"          type as string,",
+				"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> source1",
+				"source1 foldDown(unroll(entry, entry),",
+				"     mapColumn(",
+				"          resourceType,",
+				"          type,",
+				"          entry",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 filter(resourceType == 'Patient') ~> filter1",
+				"filter1 derive(patient_id = patient_id,",
+				"          gender = gender,",
+				"          birthDate = toDate(birthDate, 'yyyy-MM-dd'),",
+				"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> derivedColumn1"
+			]
+		}
+	}
+}
