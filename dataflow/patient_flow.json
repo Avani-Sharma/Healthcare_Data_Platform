@@ -10,10 +10,6 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "patientjsondata",
-						"type": "DatasetReference"
-					},
 					"name": "sink1"
 				}
 			],
