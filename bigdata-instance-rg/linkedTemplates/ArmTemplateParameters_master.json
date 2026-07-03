@@ -8,11 +8,17 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"junestorageregex_accountKey": {
+			"value": ""
+		},
 		"mysql_ls_password": {
 			"value": ""
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://externalregex.dfs.core.windows.net/"
+		},
+		"junestorageregex_properties_typeProperties_url": {
+			"value": "https://junestoragereg.dfs.core.windows.net/"
 		},
 		"mysql_ls_properties_typeProperties_server": {
 			"value": "127.0.0.1"

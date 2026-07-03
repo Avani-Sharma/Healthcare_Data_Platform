@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"junestorageregex_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'junestorageregex'"
+		},
 		"mysql_ls_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'mysql_ls'"
@@ -18,6 +22,10 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://externalregex.dfs.core.windows.net/"
+		},
+		"junestorageregex_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://junestoragereg.dfs.core.windows.net/"
 		},
 		"mysql_ls_properties_typeProperties_server": {
 			"type": "string",
@@ -61,11 +69,17 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"junestorageregex_accountKey": {
+						"value": "[parameters('junestorageregex_accountKey')]"
+					},
 					"mysql_ls_password": {
 						"value": "[parameters('mysql_ls_password')]"
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"junestorageregex_properties_typeProperties_url": {
+						"value": "[parameters('junestorageregex_properties_typeProperties_url')]"
 					},
 					"mysql_ls_properties_typeProperties_server": {
 						"value": "[parameters('mysql_ls_properties_typeProperties_server')]"

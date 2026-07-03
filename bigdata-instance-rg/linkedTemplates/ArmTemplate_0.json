@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"junestorageregex_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'junestorageregex'"
+		},
 		"mysql_ls_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'mysql_ls'"
@@ -18,6 +22,10 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://externalregex.dfs.core.windows.net/"
+		},
+		"junestorageregex_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://junestoragereg.dfs.core.windows.net/"
 		},
 		"mysql_ls_properties_typeProperties_server": {
 			"type": "string",
@@ -54,6 +62,23 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/junestorageregex')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('junestorageregex_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('junestorageregex_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/localshir')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -62,6 +87,185 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/csv_hospital')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestorageregex",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "CostReport_2022_Final.csv",
+						"folderPath": "hospital_costreport_csv",
+						"fileSystem": "bigdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "rpt_rec_num",
+						"type": "String"
+					},
+					{
+						"name": "Provider CCN",
+						"type": "String"
+					},
+					{
+						"name": "Facility Name",
+						"type": "String"
+					},
+					{
+						"name": "Street Address",
+						"type": "String"
+					},
+					{
+						"name": "City",
+						"type": "String"
+					},
+					{
+						"name": "State Code",
+						"type": "String"
+					},
+					{
+						"name": "Zip Code",
+						"type": "String"
+					},
+					{
+						"name": "County",
+						"type": "String"
+					},
+					{
+						"name": "Medicare CBSA Number",
+						"type": "String"
+					},
+					{
+						"name": "Rural versus Urban",
+						"type": "String"
+					},
+					{
+						"name": "Fiscal Year Begin Date",
+						"type": "String"
+					},
+					{
+						"name": "Fiscal Year End Date",
+						"type": "String"
+					},
+					{
+						"name": "Type of Control",
+						"type": "String"
+					},
+					{
+						"name": "Number of Beds",
+						"type": "String"
+					},
+					{
+						"name": "Total Bed Days Available",
+						"type": "String"
+					},
+					{
+						"name": "Total Days Title XVIII",
+						"type": "String"
+					},
+					{
+						"name": "Total Days Total",
+						"type": "String"
+					},
+					{
+						"name": "Total Discharges Title XVIII",
+						"type": "String"
+					},
+					{
+						"name": "Total Discharges Total",
+						"type": "String"
+					},
+					{
+						"name": "Inpatient Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Outpatient Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Total Patient Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Less Contractual Allowance and Discounts on Patients' Accounts",
+						"type": "String"
+					},
+					{
+						"name": "Net Patient Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Less Total Operating Expense",
+						"type": "String"
+					},
+					{
+						"name": "Net Income from Service to Patients",
+						"type": "String"
+					},
+					{
+						"name": "Net Income",
+						"type": "String"
+					},
+					{
+						"name": "DRG Amounts Other Than Outlier Payments",
+						"type": "String"
+					},
+					{
+						"name": "Total IME Payment",
+						"type": "String"
+					},
+					{
+						"name": "Allowable DSH Percentage",
+						"type": "String"
+					},
+					{
+						"name": "Cost To Charge Ratio",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/junestorageregex')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/csv_to_parquet_hospital')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Landing/hospital",
+						"fileSystem": "healthcare-project"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/mysql_to_parquet')]",
@@ -117,6 +321,81 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_extract')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "convert_csv_to_parquet",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "csv_hospital",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "csv_to_parquet_hospital",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/csv_hospital')]",
+				"[concat(variables('factoryId'), '/datasets/csv_to_parquet_hospital')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/mysql')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -143,7 +422,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
+						"name": "convert_mysql_to_parquet",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
