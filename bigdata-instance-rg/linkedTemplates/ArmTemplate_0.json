@@ -1987,7 +1987,7 @@
 						"flatten2 filter(resource.resourceType == 'Claim') ~> filter2",
 						"filter2 derive(insurer = byPath('resource.insurance[1].coverage.display'),",
 						"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', ''),",
-						"          claim_date = byPath(resource.id)) ~> derivedColumn2",
+						"          claim_date = byPath('resource.id')) ~> derivedColumn2",
 						"derivedColumn2 aggregate(groupBy(patient_ref),",
 						"     latest_claim_date = max(claim_date),",
 						"          insurance_cover_display = first(insurer),",
