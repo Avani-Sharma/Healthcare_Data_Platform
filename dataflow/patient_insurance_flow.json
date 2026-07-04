@@ -57,6 +57,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     fileName as string",
+				"}",
 				"source(output(",
 				"          resourceType as string,",
 				"          type as string,",
@@ -64,6 +67,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> PatientJSON",
 				"PatientJSON foldDown(unroll(entry, entry),",
