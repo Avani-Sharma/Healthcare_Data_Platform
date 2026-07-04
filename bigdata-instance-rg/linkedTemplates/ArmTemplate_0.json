@@ -276,20 +276,11 @@
 					"referenceName": "junestorageregex",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"fileName": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().fileName",
-							"type": "Expression"
-						},
 						"folderPath": "patient_json",
 						"fileSystem": "bigdata"
 					}
@@ -1319,9 +1310,6 @@
 						}
 					],
 					"scriptLines": [
-						"parameters{",
-						"     fileName as string ('patient1.json')",
-						"}",
 						"source(output(",
 						"          resourceType as string,",
 						"          type as string,",
@@ -1402,114 +1390,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/master_pipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "GetMetadata1",
-						"type": "GetMetadata",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "json_patient_syntheria",
-								"type": "DatasetReference",
-								"parameters": {
-									"fileName": "@item"
-								}
-							},
-							"fieldList": [
-								"childItems"
-							],
-							"storeSettings": {
-								"type": "AzureBlobFSReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "JsonReadSettings"
-							}
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "GetMetadata1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('GetMetadata1').output.childItems",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Data flow1",
-									"type": "ExecuteDataFlow",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataflow": {
-											"referenceName": "patient_insurance_flow",
-											"type": "DataFlowReference",
-											"parameters": {
-												"fileName": {
-													"value": "'@{item().name}'",
-													"type": "Expression"
-												}
-											},
-											"datasetParameters": {
-												"PatientJSON": {
-													"fileName": "@item().name"
-												},
-												"sink1": {}
-											}
-										},
-										"staging": {},
-										"compute": {
-											"coreCount": 8,
-											"computeType": "General"
-										},
-										"traceLevel": "Fine"
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/json_patient_syntheria')]",
-				"[concat(variables('factoryId'), '/dataflows/patient_insurance_flow')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/patient_dataflow_extract')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1531,13 +1411,9 @@
 							"dataflow": {
 								"referenceName": "patient_insurance_flow",
 								"type": "DataFlowReference",
-								"parameters": {
-									"fileName": "'patient1.json'"
-								},
+								"parameters": {},
 								"datasetParameters": {
-									"PatientJSON": {
-										"fileName": "@item"
-									},
+									"PatientJSON": {},
 									"sink1": {}
 								}
 							},
