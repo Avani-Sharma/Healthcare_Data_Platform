@@ -5,12 +5,6 @@
 			"referenceName": "junestorageregex",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"fileName": {
-				"type": "string",
-				"defaultValue": "patient1.json"
-			}
-		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
