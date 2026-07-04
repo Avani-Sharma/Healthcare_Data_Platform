@@ -276,11 +276,21 @@
 					"referenceName": "junestorageregex",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"fileName": {
+						"type": "string",
+						"defaultValue": "patient1.json"
+					}
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().fileName",
+							"type": "Expression"
+						},
 						"folderPath": "patient_json",
 						"fileSystem": "bigdata"
 					}
@@ -1310,6 +1320,9 @@
 						}
 					],
 					"scriptLines": [
+						"parameters{",
+						"     fileName as string ('patient1.json')",
+						"}",
 						"source(output(",
 						"          resourceType as string,",
 						"          type as string,",
@@ -1317,6 +1330,7 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     inferDriftedColumnTypes: true,",
 						"     ignoreNoFilesFound: false,",
 						"     documentForm: 'singleDocument') ~> PatientJSON",
 						"PatientJSON foldDown(unroll(entry, entry),",
