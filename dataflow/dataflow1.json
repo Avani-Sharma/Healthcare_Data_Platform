@@ -22,6 +22,15 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -34,19 +43,32 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> source1",
-				"source1 foldDown(unroll(entry, entry),",
+				"source1 foldDown(unroll(entry),",
 				"     mapColumn(",
-				"          resourceType,",
-				"          type,",
-				"          entry",
+				"          fullUrl = entry.fullUrl,",
+				"          resource = entry.resource,",
+				"          request = entry.request",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 filter(resourceType == 'Patient') ~> filter1",
-				"filter1 derive(patient_id = patient_id,",
-				"          gender = gender,",
-				"          birthDate = toDate(birthDate, 'yyyy-MM-dd'),",
-				"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> derivedColumn1"
+				"flatten1 filter(resource.resourceType == 'Claim') ~> filter1",
+				"filter1 derive(insurer = byPath('resource.insurance[1].coverage.display'),",
+				"          claim_date = byPath('resource.created'),",
+				"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', '')) ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(patient_ref),",
+				"     latest_claim_date = max(claim_date),",
+				"          insurance_cover_display = first(insurer),",
+				"          claim_id = first(byPath('resource.id'))) ~> aggregate1",
+				"aggregate1 derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> derivedColumn2",
+				"derivedColumn2 select(mapColumn(",
+				"          patient_ref,",
+				"          latest_claim_date,",
+				"          insurance_cover_display,",
+				"          claim_id,",
+				"          insurance_tier",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
