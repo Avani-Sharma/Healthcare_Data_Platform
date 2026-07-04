@@ -89,611 +89,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Json1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "junestorageregex",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "Abe604_Schmidt332_ccfc4db2-2026-7adb-3db0-33f3828140bb.json",
-						"folderPath": "patient_json",
-						"fileSystem": "bigdata"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"resourceType": {
-							"type": "string"
-						},
-						"type": {
-							"type": "string"
-						},
-						"entry": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"fullUrl": {
-										"type": "string"
-									},
-									"resource": {
-										"type": "object",
-										"properties": {
-											"resourceType": {
-												"type": "string"
-											},
-											"id": {
-												"type": "string"
-											},
-											"meta": {
-												"type": "object",
-												"properties": {
-													"profile": {
-														"type": "array",
-														"items": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"text": {
-												"type": "object",
-												"properties": {
-													"status": {
-														"type": "string"
-													},
-													"div": {
-														"type": "string"
-													}
-												}
-											},
-											"extension": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"url": {
-															"type": "string"
-														},
-														"extension": {
-															"type": "array",
-															"items": {
-																"type": "object",
-																"properties": {
-																	"url": {
-																		"type": "string"
-																	},
-																	"valueCoding": {
-																		"type": "object",
-																		"properties": {
-																			"system": {
-																				"type": "string"
-																			},
-																			"code": {
-																				"type": "string"
-																			},
-																			"display": {
-																				"type": "string"
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											},
-											"identifier": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"system": {
-															"type": "string"
-														},
-														"value": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"name": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"use": {
-															"type": "string"
-														},
-														"family": {
-															"type": "string"
-														},
-														"given": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														},
-														"prefix": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														}
-													}
-												}
-											},
-											"telecom": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"system": {
-															"type": "string"
-														},
-														"value": {
-															"type": "string"
-														},
-														"use": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"gender": {
-												"type": "string"
-											},
-											"birthDate": {
-												"type": "string"
-											},
-											"address": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"extension": {
-															"type": "array",
-															"items": {
-																"type": "object",
-																"properties": {
-																	"url": {
-																		"type": "string"
-																	},
-																	"extension": {
-																		"type": "array",
-																		"items": {
-																			"type": "object",
-																			"properties": {
-																				"url": {
-																					"type": "string"
-																				},
-																				"valueDecimal": {
-																					"type": "number"
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														},
-														"line": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														},
-														"city": {
-															"type": "string"
-														},
-														"state": {
-															"type": "string"
-														},
-														"postalCode": {
-															"type": "string"
-														},
-														"country": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"maritalStatus": {
-												"type": "object",
-												"properties": {
-													"coding": {
-														"type": "array",
-														"items": {
-															"type": "object",
-															"properties": {
-																"system": {
-																	"type": "string"
-																},
-																"code": {
-																	"type": "string"
-																},
-																"display": {
-																	"type": "string"
-																}
-															}
-														}
-													},
-													"text": {
-														"type": "string"
-													}
-												}
-											},
-											"multipleBirthBoolean": {
-												"type": "boolean"
-											},
-											"communication": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"language": {
-															"type": "object",
-															"properties": {
-																"coding": {
-																	"type": "array",
-																	"items": {
-																		"type": "object",
-																		"properties": {
-																			"system": {
-																				"type": "string"
-																			},
-																			"code": {
-																				"type": "string"
-																			},
-																			"display": {
-																				"type": "string"
-																			}
-																		}
-																	}
-																},
-																"text": {
-																	"type": "string"
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									},
-									"request": {
-										"type": "object",
-										"properties": {
-											"method": {
-												"type": "string"
-											},
-											"url": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/junestorageregex')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Json_Patient')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "junestorageregex",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "Abdul218_Harris789_b0a06ead-cc42-aa48-dad6-841d4aa679fa.json",
-						"folderPath": "patient_json",
-						"fileSystem": "bigdata"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"resourceType": {
-							"type": "string"
-						},
-						"type": {
-							"type": "string"
-						},
-						"entry": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"fullUrl": {
-										"type": "string"
-									},
-									"resource": {
-										"type": "object",
-										"properties": {
-											"resourceType": {
-												"type": "string"
-											},
-											"id": {
-												"type": "string"
-											},
-											"meta": {
-												"type": "object",
-												"properties": {
-													"profile": {
-														"type": "array",
-														"items": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"text": {
-												"type": "object",
-												"properties": {
-													"status": {
-														"type": "string"
-													},
-													"div": {
-														"type": "string"
-													}
-												}
-											},
-											"extension": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"url": {
-															"type": "string"
-														},
-														"extension": {
-															"type": "array",
-															"items": {
-																"type": "object",
-																"properties": {
-																	"url": {
-																		"type": "string"
-																	},
-																	"valueCoding": {
-																		"type": "object",
-																		"properties": {
-																			"system": {
-																				"type": "string"
-																			},
-																			"code": {
-																				"type": "string"
-																			},
-																			"display": {
-																				"type": "string"
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											},
-											"identifier": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"system": {
-															"type": "string"
-														},
-														"value": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"name": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"use": {
-															"type": "string"
-														},
-														"family": {
-															"type": "string"
-														},
-														"given": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														},
-														"prefix": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														}
-													}
-												}
-											},
-											"telecom": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"system": {
-															"type": "string"
-														},
-														"value": {
-															"type": "string"
-														},
-														"use": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"gender": {
-												"type": "string"
-											},
-											"birthDate": {
-												"type": "string"
-											},
-											"deceasedDateTime": {
-												"type": "string"
-											},
-											"address": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"extension": {
-															"type": "array",
-															"items": {
-																"type": "object",
-																"properties": {
-																	"url": {
-																		"type": "string"
-																	},
-																	"extension": {
-																		"type": "array",
-																		"items": {
-																			"type": "object",
-																			"properties": {
-																				"url": {
-																					"type": "string"
-																				},
-																				"valueDecimal": {
-																					"type": "number"
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														},
-														"line": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														},
-														"city": {
-															"type": "string"
-														},
-														"state": {
-															"type": "string"
-														},
-														"postalCode": {
-															"type": "string"
-														},
-														"country": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"maritalStatus": {
-												"type": "object",
-												"properties": {
-													"coding": {
-														"type": "array",
-														"items": {
-															"type": "object",
-															"properties": {
-																"system": {
-																	"type": "string"
-																},
-																"code": {
-																	"type": "string"
-																},
-																"display": {
-																	"type": "string"
-																}
-															}
-														}
-													},
-													"text": {
-														"type": "string"
-													}
-												}
-											},
-											"multipleBirthBoolean": {
-												"type": "boolean"
-											},
-											"communication": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"language": {
-															"type": "object",
-															"properties": {
-																"coding": {
-																	"type": "array",
-																	"items": {
-																		"type": "object",
-																		"properties": {
-																			"system": {
-																				"type": "string"
-																			},
-																			"code": {
-																				"type": "string"
-																			},
-																			"display": {
-																				"type": "string"
-																			}
-																		}
-																	}
-																},
-																"text": {
-																	"type": "string"
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									},
-									"request": {
-										"type": "object",
-										"properties": {
-											"method": {
-												"type": "string"
-											},
-											"url": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/junestorageregex')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/csv_hospital')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -873,32 +268,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/mysql_to_parquet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Landing/prescriber",
-						"fileSystem": "healthcare-project"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/patient')]",
+			"name": "[concat(parameters('factoryName'), '/json_patient_syntheria')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1199,7 +569,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/patient_json_csv')]",
+			"name": "[concat(parameters('factoryName'), '/mysql_to_parquet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1208,17 +578,14 @@
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "Landing/patient",
+						"folderPath": "Landing/prescriber",
 						"fileSystem": "healthcare-project"
 					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
+					"compressionCodec": "snappy"
 				},
 				"schema": []
 			},
@@ -1227,7 +594,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/patient_json_to_csv')]",
+			"name": "[concat(parameters('factoryName'), '/patient_json_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1893,10 +1260,10 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "patient",
+								"referenceName": "json_patient_syntheria",
 								"type": "DatasetReference"
 							},
-							"name": "source1"
+							"name": "PatientJSON"
 						}
 					],
 					"sinks": [
@@ -1910,34 +1277,34 @@
 					],
 					"transformations": [
 						{
-							"name": "flatten1"
+							"name": "PatientFlatten"
 						},
 						{
-							"name": "filter1"
+							"name": "PatientFilter"
 						},
 						{
-							"name": "derivedColumn1"
+							"name": "PatientExtraCol"
 						},
 						{
-							"name": "select1"
+							"name": "PatientSelect"
 						},
 						{
-							"name": "flatten2"
+							"name": "InsuranceFlatten"
 						},
 						{
-							"name": "filter2"
+							"name": "InsuranceFilter"
 						},
 						{
-							"name": "derivedColumn2"
+							"name": "InsuranceExtraCol1"
 						},
 						{
-							"name": "aggregate1"
+							"name": "InsuranceAggregate"
 						},
 						{
-							"name": "derivedColumn3"
+							"name": "InsuranceExtraCol2"
 						},
 						{
-							"name": "select2"
+							"name": "InsuranceSelect"
 						},
 						{
 							"name": "join1"
@@ -1952,8 +1319,8 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'singleDocument') ~> source1",
-						"source1 foldDown(unroll(entry, entry),",
+						"     documentForm: 'singleDocument') ~> PatientJSON",
+						"PatientJSON foldDown(unroll(entry, entry),",
 						"     mapColumn(",
 						"          resourceType = entry.resource.resourceType,",
 						"          Patientid = entry.resource.id,",
@@ -1961,13 +1328,13 @@
 						"          birthDate = entry.resource.birthDate",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 filter(resourceType == 'Patient') ~> filter1",
-						"filter1 derive(Patientid = Patientid,",
+						"     skipDuplicateMapOutputs: false) ~> PatientFlatten",
+						"PatientFlatten filter(resourceType == 'Patient') ~> PatientFilter",
+						"PatientFilter derive(Patientid = Patientid,",
 						"          birthDate = toDate(birthDate, 'yyyy-MM-dd'),",
 						"          gender = gender,",
-						"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> derivedColumn1",
-						"derivedColumn1 select(mapColumn(",
+						"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> PatientExtraCol",
+						"PatientExtraCol select(mapColumn(",
 						"          resourceType,",
 						"          Patientid,",
 						"          gender,",
@@ -1975,25 +1342,25 @@
 						"          age_band",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"source1 foldDown(unroll(entry),",
+						"     skipDuplicateMapOutputs: true) ~> PatientSelect",
+						"PatientJSON foldDown(unroll(entry),",
 						"     mapColumn(",
 						"          fullUrl = entry.fullUrl,",
 						"          resource = entry.resource,",
 						"          request = entry.request",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten2",
-						"flatten2 filter(resource.resourceType == 'Claim') ~> filter2",
-						"filter2 derive(insurer = byPath('resource.insurance[1].coverage.display'),",
+						"     skipDuplicateMapOutputs: false) ~> InsuranceFlatten",
+						"InsuranceFlatten filter(resource.resourceType == 'Claim') ~> InsuranceFilter",
+						"InsuranceFilter derive(insurer = byPath('resource.insurance[1].coverage.display'),",
 						"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', ''),",
-						"          claim_date = byPath('resource.id')) ~> derivedColumn2",
-						"derivedColumn2 aggregate(groupBy(patient_ref),",
+						"          claim_date = byPath('resource.id')) ~> InsuranceExtraCol1",
+						"InsuranceExtraCol1 aggregate(groupBy(patient_ref),",
 						"     latest_claim_date = max(claim_date),",
 						"          insurance_cover_display = first(insurer),",
-						"          claim_id = first(resource.id)) ~> aggregate1",
-						"aggregate1 derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> derivedColumn3",
-						"derivedColumn3 select(mapColumn(",
+						"          claim_id = first(resource.id)) ~> InsuranceAggregate",
+						"InsuranceAggregate derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> InsuranceExtraCol2",
+						"InsuranceExtraCol2 select(mapColumn(",
 						"          patient_ref,",
 						"          latest_claim_date,",
 						"          insurance_cover_display,",
@@ -2001,8 +1368,8 @@
 						"          insurance_tier",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select2",
-						"select1, select2 join(Patientid == patient_ref,",
+						"     skipDuplicateMapOutputs: true) ~> InsuranceSelect",
+						"PatientSelect, InsuranceSelect join(Patientid == patient_ref,",
 						"     joinType:'left',",
 						"     matchType:'exact',",
 						"     ignoreSpaces: false,",
@@ -2018,12 +1385,12 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/patient')]",
+				"[concat(variables('factoryId'), '/datasets/json_patient_syntheria')]",
 				"[concat(variables('factoryId'), '/datasets/patient_json_csv')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/patient_dataflow_extract')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2046,7 +1413,7 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source1": {},
+									"PatientJSON": {},
 									"sink1": {}
 								}
 							},
