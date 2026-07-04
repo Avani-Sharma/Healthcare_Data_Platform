@@ -65,7 +65,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> source1",
+				"     documentForm: 'singleDocument') ~> source1",
 				"source1 foldDown(unroll(entry, entry),",
 				"     mapColumn(",
 				"          resourceType = entry.resource.resourceType,",
