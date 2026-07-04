@@ -636,7 +636,10 @@
 											"referenceName": "patient_insurance_flow",
 											"type": "DataFlowReference",
 											"parameters": {
-												"fileName": "'patient1.json'"
+												"fileName": {
+													"value": "'@{item().name}'",
+													"type": "Expression"
+												}
 											},
 											"datasetParameters": {
 												"PatientJSON": {
