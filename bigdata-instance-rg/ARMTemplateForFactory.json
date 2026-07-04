@@ -1488,6 +1488,7 @@
 						"     broadcast: 'auto')~> join1",
 						"join1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     partitionFileNames:['patient_insurance.csv'],",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
