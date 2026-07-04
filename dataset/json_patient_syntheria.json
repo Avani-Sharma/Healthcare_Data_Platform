@@ -15,7 +15,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@dataset().fileName",
 				"folderPath": "patient_json",
 				"fileSystem": "bigdata"
 			}
