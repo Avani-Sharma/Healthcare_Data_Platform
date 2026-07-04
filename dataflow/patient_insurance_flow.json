@@ -6,10 +6,10 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "patient",
+						"referenceName": "json_patient_syntheria",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "PatientJSON"
 				}
 			],
 			"sinks": [
@@ -23,34 +23,34 @@
 			],
 			"transformations": [
 				{
-					"name": "flatten1"
+					"name": "PatientFlatten"
 				},
 				{
-					"name": "filter1"
+					"name": "PatientFilter"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "PatientExtraCol"
 				},
 				{
-					"name": "select1"
+					"name": "PatientSelect"
 				},
 				{
-					"name": "flatten2"
+					"name": "InsuranceFlatten"
 				},
 				{
-					"name": "filter2"
+					"name": "InsuranceFilter"
 				},
 				{
-					"name": "derivedColumn2"
+					"name": "InsuranceExtraCol1"
 				},
 				{
-					"name": "aggregate1"
+					"name": "InsuranceAggregate"
 				},
 				{
-					"name": "derivedColumn3"
+					"name": "InsuranceExtraCol2"
 				},
 				{
-					"name": "select2"
+					"name": "InsuranceSelect"
 				},
 				{
 					"name": "join1"
@@ -65,8 +65,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> source1",
-				"source1 foldDown(unroll(entry, entry),",
+				"     documentForm: 'singleDocument') ~> PatientJSON",
+				"PatientJSON foldDown(unroll(entry, entry),",
 				"     mapColumn(",
 				"          resourceType = entry.resource.resourceType,",
 				"          Patientid = entry.resource.id,",
@@ -74,13 +74,13 @@
 				"          birthDate = entry.resource.birthDate",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 filter(resourceType == 'Patient') ~> filter1",
-				"filter1 derive(Patientid = Patientid,",
+				"     skipDuplicateMapOutputs: false) ~> PatientFlatten",
+				"PatientFlatten filter(resourceType == 'Patient') ~> PatientFilter",
+				"PatientFilter derive(Patientid = Patientid,",
 				"          birthDate = toDate(birthDate, 'yyyy-MM-dd'),",
 				"          gender = gender,",
-				"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> derivedColumn1",
-				"derivedColumn1 select(mapColumn(",
+				"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> PatientExtraCol",
+				"PatientExtraCol select(mapColumn(",
 				"          resourceType,",
 				"          Patientid,",
 				"          gender,",
@@ -88,25 +88,25 @@
 				"          age_band",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"source1 foldDown(unroll(entry),",
+				"     skipDuplicateMapOutputs: true) ~> PatientSelect",
+				"PatientJSON foldDown(unroll(entry),",
 				"     mapColumn(",
 				"          fullUrl = entry.fullUrl,",
 				"          resource = entry.resource,",
 				"          request = entry.request",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten2",
-				"flatten2 filter(resource.resourceType == 'Claim') ~> filter2",
-				"filter2 derive(insurer = byPath('resource.insurance[1].coverage.display'),",
+				"     skipDuplicateMapOutputs: false) ~> InsuranceFlatten",
+				"InsuranceFlatten filter(resource.resourceType == 'Claim') ~> InsuranceFilter",
+				"InsuranceFilter derive(insurer = byPath('resource.insurance[1].coverage.display'),",
 				"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', ''),",
-				"          claim_date = byPath('resource.id')) ~> derivedColumn2",
-				"derivedColumn2 aggregate(groupBy(patient_ref),",
+				"          claim_date = byPath('resource.id')) ~> InsuranceExtraCol1",
+				"InsuranceExtraCol1 aggregate(groupBy(patient_ref),",
 				"     latest_claim_date = max(claim_date),",
 				"          insurance_cover_display = first(insurer),",
-				"          claim_id = first(resource.id)) ~> aggregate1",
-				"aggregate1 derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> derivedColumn3",
-				"derivedColumn3 select(mapColumn(",
+				"          claim_id = first(resource.id)) ~> InsuranceAggregate",
+				"InsuranceAggregate derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> InsuranceExtraCol2",
+				"InsuranceExtraCol2 select(mapColumn(",
 				"          patient_ref,",
 				"          latest_claim_date,",
 				"          insurance_cover_display,",
@@ -114,8 +114,8 @@
 				"          insurance_tier",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
-				"select1, select2 join(Patientid == patient_ref,",
+				"     skipDuplicateMapOutputs: true) ~> InsuranceSelect",
+				"PatientSelect, InsuranceSelect join(Patientid == patient_ref,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
