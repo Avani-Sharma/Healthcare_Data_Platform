@@ -58,7 +58,7 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     fileName as string",
+				"     fileName as string ('patient1.json')",
 				"}",
 				"source(output(",
 				"          resourceType as string,",
