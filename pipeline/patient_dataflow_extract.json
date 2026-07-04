@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "patient_dataflow_extract",
 	"properties": {
 		"activities": [
 			{
