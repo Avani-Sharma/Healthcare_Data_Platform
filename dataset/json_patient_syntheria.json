@@ -5,11 +5,17 @@
 			"referenceName": "junestorageregex",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"fileName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "@dataset().fileName",
 				"folderPath": "patient_json",
 				"fileSystem": "bigdata"
 			}
