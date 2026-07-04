@@ -1,0 +1,133 @@
+{
+	"name": "patient_insurance_flow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "patient",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "patient_json_csv",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          resourceType as string,",
+				"          type as string,",
+				"          entry as (fullUrl as string, resource as (resourceType as string, id as string, meta as (profile as string[]), text as (status as string, div as string), extension as (url as string, extension as (url as string, valueCoding as (system as string, code as string, display as string))[])[], identifier as (system as string, value as string)[], name as (use as string, family as string, given as string[], prefix as string[])[], telecom as (system as string, value as string, use as string)[], gender as string, birthDate as string, address as (extension as (url as string, extension as (url as string, valueDecimal as double)[])[], line as string[], city as string, state as string, postalCode as string, country as string)[], maritalStatus as (coding as (system as string, code as string, display as string)[], text as string), multipleBirthBoolean as boolean, communication as (language as (coding as (system as string, code as string, display as string)[], text as string))[]), request as (method as string, url as string))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> source1",
+				"source1 foldDown(unroll(entry, entry),",
+				"     mapColumn(",
+				"          resourceType = entry.resource.resourceType,",
+				"          Patientid = entry.resource.id,",
+				"          gender = entry.resource.gender,",
+				"          birthDate = entry.resource.birthDate",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 filter(resourceType == 'Patient') ~> filter1",
+				"filter1 derive(Patientid = Patientid,",
+				"          birthDate = toDate(birthDate, 'yyyy-MM-dd'),",
+				"          gender = gender,",
+				"          age_band = case(     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 18, '0-17',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 35, '18-34',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 50, '35-49',     toInteger(floor(monthsBetween(currentDate(), toDate(birthDate, 'yyyy-MM-dd')) / 12)) < 65, '50-64',     '65+' )) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          resourceType,",
+				"          Patientid,",
+				"          gender,",
+				"          birthDate,",
+				"          age_band",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"source1 foldDown(unroll(entry),",
+				"     mapColumn(",
+				"          fullUrl = entry.fullUrl,",
+				"          resource = entry.resource,",
+				"          request = entry.request",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2 filter(resource.resourceType == 'Claim') ~> filter2",
+				"filter2 derive(insurer = byPath('resource.insurance[1].coverage.display'),",
+				"          patient_ref = replace(byPath('resource.patient.reference'), 'urn:uuid:', ''),",
+				"          claim_date = byPath(resource.id)) ~> derivedColumn2",
+				"derivedColumn2 aggregate(groupBy(patient_ref),",
+				"     latest_claim_date = max(claim_date),",
+				"          insurance_cover_display = first(insurer),",
+				"          claim_id = first(resource.id)) ~> aggregate1",
+				"aggregate1 derive(insurance_tier = case(     in(['Humana', 'UnitedHealthcare', 'Aetna'], insurance_cover_display), 'Premium',     in(['Medicare', 'Medicaid'], insurance_cover_display), 'Government',     isNull(insurance_cover_display), 'Unknown',     'Standard' )) ~> derivedColumn3",
+				"derivedColumn3 select(mapColumn(",
+				"          patient_ref,",
+				"          latest_claim_date,",
+				"          insurance_cover_display,",
+				"          claim_id,",
+				"          insurance_tier",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select1, select2 join(Patientid == patient_ref,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
