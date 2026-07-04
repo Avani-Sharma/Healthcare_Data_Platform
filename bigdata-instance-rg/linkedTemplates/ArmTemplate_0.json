@@ -281,7 +281,6 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "Abe604_Schmidt332_ccfc4db2-2026-7adb-3db0-33f3828140bb.json",
 						"folderPath": "patient_json",
 						"fileSystem": "bigdata"
 					}
