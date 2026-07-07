@@ -1,0 +1,25 @@
+{
+	"name": "hospitalCostReport_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "hospitalCostReport_extract",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
+			"blobPathEndsWith": ".csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
