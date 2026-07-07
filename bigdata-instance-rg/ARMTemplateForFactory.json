@@ -1359,37 +1359,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "hospitalCostReport_extract",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
-					"blobPathEndsWith": ".csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('hospitalCostReport_trigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/hospitalCostReport_extract')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/localshir')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -1537,6 +1506,37 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/json_patient_syntheria')]",
 				"[concat(variables('factoryId'), '/datasets/patient_json_csv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "hospitalCostReport_extract",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('hospitalCostReport_trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/hospitalCostReport_extract')]"
 			]
 		}
 	]
