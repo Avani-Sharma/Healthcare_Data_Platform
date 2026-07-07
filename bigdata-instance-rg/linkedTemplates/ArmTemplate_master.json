@@ -132,9 +132,6 @@
 					},
 					"mysql_ls_properties_typeProperties_username": {
 						"value": "[parameters('mysql_ls_properties_typeProperties_username')]"
-					},
-					"icd_trigger_properties_typeProperties_scope": {
-						"value": "[parameters('icd_trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
@@ -153,6 +150,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"icd_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('icd_trigger_properties_typeProperties_scope')]"
 					},
 					"patient_trigger_properties_typeProperties_scope": {
 						"value": "[parameters('patient_trigger_properties_typeProperties_scope')]"
