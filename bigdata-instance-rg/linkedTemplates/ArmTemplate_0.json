@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureSynapseAnalytics1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics1'"
+		},
 		"junestorageregex_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'junestorageregex'"
@@ -23,9 +27,25 @@
 			"type": "string",
 			"defaultValue": "https://externalregex.dfs.core.windows.net/"
 		},
+		"AzureSynapseAnalytics1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "bigdata-workspace.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "avani"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladminuser"
+		},
 		"junestorageregex_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://junestoragereg.dfs.core.windows.net/"
+		},
+		"hospitalCostReport_Trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		},
 		"mysql_ls_properties_typeProperties_server": {
 			"type": "string",
@@ -39,7 +59,7 @@
 			"type": "string",
 			"defaultValue": "root"
 		},
-		"hospitalCostReport_trigger_properties_typeProperties_scope": {
+		"icd_trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		}
@@ -66,6 +86,28 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"server": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSynapseAnalytics1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/junestorageregex')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -78,6 +120,28 @@
 						"type": "SecureString",
 						"value": "[parameters('junestorageregex_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('hospitalCostReport_Trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobDeleted",
+						"Microsoft.Storage.BlobCreated"
+					]
 				}
 			},
 			"dependsOn": []
@@ -1496,6 +1560,39 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "convert_mysql_to_parquet",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "AzureSynapseAnalytics1",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "INSERT INTO bronze_patient\n(\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    source_file,\n    loaded_at\n)\nSELECT\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    'patient.csv',\n    GETDATE()\nFROM patient_ext;"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
 					}
 				],
 				"policy": {
@@ -1505,20 +1602,21 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/mysql')]",
-				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]"
+				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_trigger')]",
+			"name": "[concat(parameters('factoryName'), '/icd_trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "hospitalCostReport_extract",
+							"referenceName": "icd_extract",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -1526,17 +1624,18 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
-					"blobPathEndsWith": ".csv",
+					"blobPathBeginsWith": "/bigdata/blobs/icd_txt/",
+					"blobPathEndsWith": ".txt",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('hospitalCostReport_trigger_properties_typeProperties_scope')]",
+					"scope": "[parameters('icd_trigger_properties_typeProperties_scope')]",
 					"events": [
-						"Microsoft.Storage.BlobCreated"
+						"Microsoft.Storage.BlobCreated",
+						"Microsoft.Storage.BlobDeleted"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/hospitalCostReport_extract')]"
+				"[concat(variables('factoryId'), '/pipelines/icd_extract')]"
 			]
 		}
 	]

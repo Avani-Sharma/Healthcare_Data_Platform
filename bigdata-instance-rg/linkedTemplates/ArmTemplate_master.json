@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureSynapseAnalytics1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics1'"
+		},
 		"junestorageregex_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'junestorageregex'"
@@ -22,6 +26,18 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://externalregex.dfs.core.windows.net/"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "bigdata-workspace.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "avani"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladminuser"
 		},
 		"junestorageregex_properties_typeProperties_url": {
 			"type": "string",
@@ -39,7 +55,15 @@
 			"type": "string",
 			"defaultValue": "root"
 		},
-		"hospitalCostReport_trigger_properties_typeProperties_scope": {
+		"hospitalCostReport_Trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
+		},
+		"icd_trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
+		},
+		"patient_trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		},
@@ -73,6 +97,9 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"AzureSynapseAnalytics1_password": {
+						"value": "[parameters('AzureSynapseAnalytics1_password')]"
+					},
 					"junestorageregex_accountKey": {
 						"value": "[parameters('junestorageregex_accountKey')]"
 					},
@@ -82,8 +109,20 @@
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
 					},
+					"AzureSynapseAnalytics1_properties_typeProperties_server": {
+						"value": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_server')]"
+					},
+					"AzureSynapseAnalytics1_properties_typeProperties_database": {
+						"value": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_database')]"
+					},
+					"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSynapseAnalytics1_properties_typeProperties_userName')]"
+					},
 					"junestorageregex_properties_typeProperties_url": {
 						"value": "[parameters('junestorageregex_properties_typeProperties_url')]"
+					},
+					"hospitalCostReport_Trigger_properties_typeProperties_scope": {
+						"value": "[parameters('hospitalCostReport_Trigger_properties_typeProperties_scope')]"
 					},
 					"mysql_ls_properties_typeProperties_server": {
 						"value": "[parameters('mysql_ls_properties_typeProperties_server')]"
@@ -94,12 +133,35 @@
 					"mysql_ls_properties_typeProperties_username": {
 						"value": "[parameters('mysql_ls_properties_typeProperties_username')]"
 					},
-					"hospitalCostReport_trigger_properties_typeProperties_scope": {
-						"value": "[parameters('hospitalCostReport_trigger_properties_typeProperties_scope')]"
+					"icd_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('icd_trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "bigdata-instance-rg_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"patient_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('patient_trigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'bigdata-instance-rg_ArmTemplate_0')]"
+			]
 		}
 	]
 }
