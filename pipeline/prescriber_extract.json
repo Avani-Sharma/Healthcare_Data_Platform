@@ -49,38 +49,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "Script1",
-				"type": "Script",
-				"dependsOn": [
-					{
-						"activity": "convert_mysql_to_parquet",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"linkedServiceName": {
-					"referenceName": "AzureSynapseAnalytics1",
-					"type": "LinkedServiceReference"
-				},
-				"typeProperties": {
-					"scripts": [
-						{
-							"type": "Query",
-							"text": "INSERT INTO bronze_patient\n(\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    source_file,\n    loaded_at\n)\nSELECT\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    'patient.csv',\n    GETDATE()\nFROM patient_ext;"
-						}
-					],
-					"scriptBlockExecutionTimeout": "02:00:00"
-				}
 			}
 		],
 		"annotations": []
