@@ -1,0 +1,24 @@
+{
+	"name": "mysql_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "prescriber_extract",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2026-07-07T08:30:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}
