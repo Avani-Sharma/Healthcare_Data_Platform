@@ -125,16 +125,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/localshir')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_Trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -153,6 +143,16 @@
 						"Microsoft.Storage.BlobCreated"
 					]
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/localshir')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
 			},
 			"dependsOn": []
 		},
@@ -1560,39 +1560,6 @@
 								"parameters": {}
 							}
 						]
-					},
-					{
-						"name": "Script1",
-						"type": "Script",
-						"dependsOn": [
-							{
-								"activity": "convert_mysql_to_parquet",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"linkedServiceName": {
-							"referenceName": "AzureSynapseAnalytics1",
-							"type": "LinkedServiceReference"
-						},
-						"typeProperties": {
-							"scripts": [
-								{
-									"type": "Query",
-									"text": "INSERT INTO bronze_patient\n(\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    source_file,\n    loaded_at\n)\nSELECT\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    'patient.csv',\n    GETDATE()\nFROM patient_ext;"
-								}
-							],
-							"scriptBlockExecutionTimeout": "02:00:00"
-						}
 					}
 				],
 				"policy": {
@@ -1602,8 +1569,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/mysql')]",
-				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]"
 			]
 		},
 		{

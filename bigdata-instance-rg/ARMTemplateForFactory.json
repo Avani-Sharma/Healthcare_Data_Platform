@@ -693,39 +693,6 @@
 								"parameters": {}
 							}
 						]
-					},
-					{
-						"name": "Script1",
-						"type": "Script",
-						"dependsOn": [
-							{
-								"activity": "convert_mysql_to_parquet",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"linkedServiceName": {
-							"referenceName": "AzureSynapseAnalytics1",
-							"type": "LinkedServiceReference"
-						},
-						"typeProperties": {
-							"scripts": [
-								{
-									"type": "Query",
-									"text": "INSERT INTO bronze_patient\n(\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    source_file,\n    loaded_at\n)\nSELECT\n    patient_id,\n    gender,\n    birth_date,\n    age_band,\n    patient_ref,\n    latest_claim_date,\n    insurance_cover_display,\n    claim_id,\n    insurance_tier,\n    'patient.csv',\n    GETDATE()\nFROM patient_ext;"
-								}
-							],
-							"scriptBlockExecutionTimeout": "02:00:00"
-						}
 					}
 				],
 				"policy": {
@@ -735,8 +702,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/mysql')]",
-				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]"
 			]
 		},
 		{
@@ -1439,6 +1405,122 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('hospitalCostReport_Trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobDeleted",
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/icd_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "icd_extract",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/icd_txt/",
+					"blobPathEndsWith": ".txt",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('icd_trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated",
+						"Microsoft.Storage.BlobDeleted"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/icd_extract')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/mysql_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "prescriber_extract",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2026-07-07T08:30:00",
+						"timeZone": "India Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/prescriber_extract')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/patient_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "patient_dataflow_extract",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/patient_json/",
+					"blobPathEndsWith": ".json",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('patient_trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobDeleted",
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/patient_dataflow_extract')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/localshir')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -1586,122 +1668,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/json_patient_syntheria')]",
 				"[concat(variables('factoryId'), '/datasets/patient_json_csv')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_Trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
-					"blobPathEndsWith": ".csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('hospitalCostReport_Trigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobDeleted",
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/icd_trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "icd_extract",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/bigdata/blobs/icd_txt/",
-					"blobPathEndsWith": ".txt",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('icd_trigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated",
-						"Microsoft.Storage.BlobDeleted"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/icd_extract')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/mysql_trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "prescriber_extract",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2026-07-07T08:30:00",
-						"timeZone": "India Standard Time"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/prescriber_extract')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/patient_trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "patient_dataflow_extract",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/bigdata/blobs/patient_json/",
-					"blobPathEndsWith": ".json",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('patient_trigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobDeleted",
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/patient_dataflow_extract')]"
 			]
 		}
 	]
