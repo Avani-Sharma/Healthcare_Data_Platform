@@ -38,6 +38,10 @@
 		"mysql_ls_properties_typeProperties_username": {
 			"type": "string",
 			"defaultValue": "root"
+		},
+		"hospitalCostReport_trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		}
 	},
 	"variables": {
@@ -735,6 +739,8 @@
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"recursive": true,
+									"wildcardFolderPath": "hospital_costreport_csv",
+									"wildcardFileName": "*.csv",
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -1500,6 +1506,37 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/mysql')]",
 				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "hospitalCostReport_extract",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/hospital_costreport_csv/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('hospitalCostReport_trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/hospitalCostReport_extract')]"
 			]
 		}
 	]

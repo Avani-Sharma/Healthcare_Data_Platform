@@ -39,6 +39,10 @@
 			"type": "string",
 			"defaultValue": "root"
 		},
+		"hospitalCostReport_trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -89,6 +93,9 @@
 					},
 					"mysql_ls_properties_typeProperties_username": {
 						"value": "[parameters('mysql_ls_properties_typeProperties_username')]"
+					},
+					"hospitalCostReport_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('hospitalCostReport_trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
