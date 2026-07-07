@@ -47,7 +47,7 @@
 		"icd_trigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		},
-		"patient_trigger_properties_typeProperties_scope": {
+		"patient_triggers_properties_typeProperties_scope": {
 			"value": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		}
 	}

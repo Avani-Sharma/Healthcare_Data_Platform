@@ -11,7 +11,7 @@
 			"type": "string",
 			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		},
-		"patient_trigger_properties_typeProperties_scope": {
+		"patient_triggers_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		}
@@ -51,6 +51,107 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/patient_main_pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "Json1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "JsonReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata1').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Data flow1",
+									"type": "ExecuteDataFlow",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "patient_insurance_flow",
+											"type": "DataFlowReference",
+											"parameters": {},
+											"datasetParameters": {
+												"PatientJSON": {
+													"FileName": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												},
+												"sink1": {}
+											},
+											"linkedServiceParameters": {}
+										},
+										"staging": {},
+										"compute": {
+											"coreCount": 8,
+											"computeType": "General"
+										},
+										"traceLevel": "Fine"
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/mysql_trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -79,7 +180,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/patient_trigger')]",
+			"name": "[concat(parameters('factoryName'), '/patient_triggers')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -88,7 +189,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "patient_dataflow_extract",
+							"referenceName": "patient_main_pipeline",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -99,14 +200,16 @@
 					"blobPathBeginsWith": "/bigdata/blobs/patient_json/",
 					"blobPathEndsWith": ".json",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('patient_trigger_properties_typeProperties_scope')]",
+					"scope": "[parameters('patient_triggers_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobDeleted",
 						"Microsoft.Storage.BlobCreated"
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/patient_main_pipeline')]"
+			]
 		}
 	]
 }

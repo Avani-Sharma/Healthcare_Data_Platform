@@ -785,6 +785,309 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestorageregex",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "patient_json",
+						"fileSystem": "bigdata"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"resourceType": {
+							"type": "string"
+						},
+						"type": {
+							"type": "string"
+						},
+						"entry": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"fullUrl": {
+										"type": "string"
+									},
+									"resource": {
+										"type": "object",
+										"properties": {
+											"resourceType": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											},
+											"meta": {
+												"type": "object",
+												"properties": {
+													"profile": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"text": {
+												"type": "object",
+												"properties": {
+													"status": {
+														"type": "string"
+													},
+													"div": {
+														"type": "string"
+													}
+												}
+											},
+											"extension": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"url": {
+															"type": "string"
+														},
+														"extension": {
+															"type": "array",
+															"items": {
+																"type": "object",
+																"properties": {
+																	"url": {
+																		"type": "string"
+																	},
+																	"valueCoding": {
+																		"type": "object",
+																		"properties": {
+																			"system": {
+																				"type": "string"
+																			},
+																			"code": {
+																				"type": "string"
+																			},
+																			"display": {
+																				"type": "string"
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											"identifier": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"system": {
+															"type": "string"
+														},
+														"value": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"name": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"use": {
+															"type": "string"
+														},
+														"family": {
+															"type": "string"
+														},
+														"given": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															}
+														},
+														"prefix": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"telecom": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"system": {
+															"type": "string"
+														},
+														"value": {
+															"type": "string"
+														},
+														"use": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"gender": {
+												"type": "string"
+											},
+											"birthDate": {
+												"type": "string"
+											},
+											"deceasedDateTime": {
+												"type": "string"
+											},
+											"address": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"extension": {
+															"type": "array",
+															"items": {
+																"type": "object",
+																"properties": {
+																	"url": {
+																		"type": "string"
+																	},
+																	"extension": {
+																		"type": "array",
+																		"items": {
+																			"type": "object",
+																			"properties": {
+																				"url": {
+																					"type": "string"
+																				},
+																				"valueDecimal": {
+																					"type": "number"
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														},
+														"line": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															}
+														},
+														"city": {
+															"type": "string"
+														},
+														"state": {
+															"type": "string"
+														},
+														"postalCode": {
+															"type": "string"
+														},
+														"country": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"maritalStatus": {
+												"type": "object",
+												"properties": {
+													"coding": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"system": {
+																	"type": "string"
+																},
+																"code": {
+																	"type": "string"
+																},
+																"display": {
+																	"type": "string"
+																}
+															}
+														}
+													},
+													"text": {
+														"type": "string"
+													}
+												}
+											},
+											"multipleBirthBoolean": {
+												"type": "boolean"
+											},
+											"communication": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"language": {
+															"type": "object",
+															"properties": {
+																"coding": {
+																	"type": "array",
+																	"items": {
+																		"type": "object",
+																		"properties": {
+																			"system": {
+																				"type": "string"
+																			},
+																			"code": {
+																				"type": "string"
+																			},
+																			"display": {
+																				"type": "string"
+																			}
+																		}
+																	}
+																},
+																"text": {
+																	"type": "string"
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"request": {
+										"type": "object",
+										"properties": {
+											"method": {
+												"type": "string"
+											},
+											"url": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/junestorageregex')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/hospitalCostReport_extract')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1509,110 +1812,6 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/patient_insurance_flow')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Get Metadata1",
-						"type": "GetMetadata",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "json_patient_syntheria",
-								"type": "DatasetReference",
-								"parameters": {
-									"FileName": "\"\""
-								}
-							},
-							"fieldList": [
-								"childItems"
-							],
-							"storeSettings": {
-								"type": "AzureBlobFSReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "JsonReadSettings"
-							}
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Get Metadata1",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get Metadata1').output.childItems",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Data flow1",
-									"type": "ExecuteDataFlow",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataflow": {
-											"referenceName": "patient_insurance_flow",
-											"type": "DataFlowReference",
-											"parameters": {},
-											"datasetParameters": {
-												"PatientJSON": {
-													"FileName": "@item().name"
-												},
-												"sink1": {}
-											}
-										},
-										"staging": {},
-										"compute": {
-											"coreCount": 8,
-											"computeType": "General"
-										},
-										"traceLevel": "Fine"
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/json_patient_syntheria')]",
 				"[concat(variables('factoryId'), '/dataflows/patient_insurance_flow')]"
 			]
 		},
