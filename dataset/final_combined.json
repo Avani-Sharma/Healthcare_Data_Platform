@@ -1,0 +1,64 @@
+{
+	"name": "final_combined",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Landing/patient",
+				"fileSystem": "healthcare-project"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "resourceType",
+				"type": "String"
+			},
+			{
+				"name": "Patientid",
+				"type": "String"
+			},
+			{
+				"name": "gender",
+				"type": "String"
+			},
+			{
+				"name": "birthDate",
+				"type": "String"
+			},
+			{
+				"name": "age_band",
+				"type": "String"
+			},
+			{
+				"name": "patient_ref",
+				"type": "String"
+			},
+			{
+				"name": "latest_claim_date",
+				"type": "String"
+			},
+			{
+				"name": "insurance_cover_display",
+				"type": "String"
+			},
+			{
+				"name": "claim_id",
+				"type": "String"
+			},
+			{
+				"name": "insurance_tier",
+				"type": "String"
+			}
+		]
+	}
+}
