@@ -1758,9 +1758,6 @@
 						}
 					],
 					"scriptLines": [
-						"parameters{",
-						"     p_file as string ('test.json')",
-						"}",
 						"source(output(",
 						"          resourceType as string,",
 						"          type as string,",
@@ -1826,7 +1823,7 @@
 						"     broadcast: 'auto')~> join1",
 						"join1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     filePattern:( toString($p_file)),",
+						"     partitionFileNames:['patient_insurance.csv'],",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -1865,7 +1862,7 @@
 								"parameters": {},
 								"datasetParameters": {
 									"PatientJSON": {
-										"FileName": "@item().name"
+										"FileName": "p_file"
 									},
 									"sink1": {}
 								}
