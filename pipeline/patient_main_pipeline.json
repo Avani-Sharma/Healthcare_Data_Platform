@@ -66,15 +66,7 @@
 							"typeProperties": {
 								"dataflow": {
 									"referenceName": "patient_insurance_flow",
-									"type": "DataFlowReference",
-									"datasetParameters": {
-										"PatientJSON": {
-											"FileName": {
-												"value": "@item().name",
-												"type": "Expression"
-											}
-										}
-									}
+									"type": "DataFlowReference"
 								},
 								"compute": {
 									"coreCount": 16,
