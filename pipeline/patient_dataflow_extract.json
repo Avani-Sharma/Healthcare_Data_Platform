@@ -20,7 +20,7 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"PatientJSON": {
-								"FileName": "p_file"
+								"FileName": "final.csv"
 							}
 						}
 					},

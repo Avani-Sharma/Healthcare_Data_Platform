@@ -57,6 +57,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     FileName as string ('test.json')",
+				"}",
 				"source(output(",
 				"          resourceType as string,",
 				"          type as string,",
