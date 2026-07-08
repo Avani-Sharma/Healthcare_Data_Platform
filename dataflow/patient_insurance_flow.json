@@ -123,7 +123,7 @@
 				"join1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['patient_insurance.csv'],",
-				"     umask: 0022,",
+				"     umask: 0220,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
