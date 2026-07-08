@@ -94,12 +94,7 @@
 											"type": "DataFlowReference",
 											"parameters": {},
 											"datasetParameters": {
-												"PatientJSON": {
-													"FileName": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												},
+												"PatientJSON": {},
 												"sink1": {}
 											}
 										},

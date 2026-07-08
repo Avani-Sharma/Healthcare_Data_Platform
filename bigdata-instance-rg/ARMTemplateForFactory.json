@@ -616,9 +616,7 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"PatientJSON": {
-										"FileName": "final.csv"
-									},
+									"PatientJSON": {},
 									"sink1": {}
 								}
 							},
@@ -714,12 +712,7 @@
 											"type": "DataFlowReference",
 											"parameters": {},
 											"datasetParameters": {
-												"PatientJSON": {
-													"FileName": {
-														"value": "@item().name",
-														"type": "Expression"
-													}
-												},
+												"PatientJSON": {},
 												"sink1": {}
 											}
 										},
@@ -1445,20 +1438,11 @@
 					"referenceName": "junestorageregex",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"FileName": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().FileName",
-							"type": "Expression"
-						},
 						"folderPath": "patient_json",
 						"fileSystem": "bigdata"
 					}
@@ -2152,9 +2136,6 @@
 						}
 					],
 					"scriptLines": [
-						"parameters{",
-						"     FileName as string ('test.json')",
-						"}",
 						"source(output(",
 						"          resourceType as string,",
 						"          type as string,",
@@ -2220,12 +2201,13 @@
 						"     broadcast: 'auto')~> join1",
 						"join1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['patient_insurance.csv'],",
+						"     partitionFileNames:['final_combined_patient_insurance.csv'],",
 						"     umask: 0220,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1"
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
 					]
 				}
 			},
