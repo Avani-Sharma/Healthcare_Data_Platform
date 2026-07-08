@@ -153,6 +153,309 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "junestorageregex",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "patient_json",
+						"fileSystem": "bigdata"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"resourceType": {
+							"type": "string"
+						},
+						"type": {
+							"type": "string"
+						},
+						"entry": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"fullUrl": {
+										"type": "string"
+									},
+									"resource": {
+										"type": "object",
+										"properties": {
+											"resourceType": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											},
+											"meta": {
+												"type": "object",
+												"properties": {
+													"profile": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"text": {
+												"type": "object",
+												"properties": {
+													"status": {
+														"type": "string"
+													},
+													"div": {
+														"type": "string"
+													}
+												}
+											},
+											"extension": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"url": {
+															"type": "string"
+														},
+														"extension": {
+															"type": "array",
+															"items": {
+																"type": "object",
+																"properties": {
+																	"url": {
+																		"type": "string"
+																	},
+																	"valueCoding": {
+																		"type": "object",
+																		"properties": {
+																			"system": {
+																				"type": "string"
+																			},
+																			"code": {
+																				"type": "string"
+																			},
+																			"display": {
+																				"type": "string"
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											"identifier": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"system": {
+															"type": "string"
+														},
+														"value": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"name": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"use": {
+															"type": "string"
+														},
+														"family": {
+															"type": "string"
+														},
+														"given": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															}
+														},
+														"prefix": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"telecom": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"system": {
+															"type": "string"
+														},
+														"value": {
+															"type": "string"
+														},
+														"use": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"gender": {
+												"type": "string"
+											},
+											"birthDate": {
+												"type": "string"
+											},
+											"deceasedDateTime": {
+												"type": "string"
+											},
+											"address": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"extension": {
+															"type": "array",
+															"items": {
+																"type": "object",
+																"properties": {
+																	"url": {
+																		"type": "string"
+																	},
+																	"extension": {
+																		"type": "array",
+																		"items": {
+																			"type": "object",
+																			"properties": {
+																				"url": {
+																					"type": "string"
+																				},
+																				"valueDecimal": {
+																					"type": "number"
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														},
+														"line": {
+															"type": "array",
+															"items": {
+																"type": "string"
+															}
+														},
+														"city": {
+															"type": "string"
+														},
+														"state": {
+															"type": "string"
+														},
+														"postalCode": {
+															"type": "string"
+														},
+														"country": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"maritalStatus": {
+												"type": "object",
+												"properties": {
+													"coding": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"system": {
+																	"type": "string"
+																},
+																"code": {
+																	"type": "string"
+																},
+																"display": {
+																	"type": "string"
+																}
+															}
+														}
+													},
+													"text": {
+														"type": "string"
+													}
+												}
+											},
+											"multipleBirthBoolean": {
+												"type": "boolean"
+											},
+											"communication": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"language": {
+															"type": "object",
+															"properties": {
+																"coding": {
+																	"type": "array",
+																	"items": {
+																		"type": "object",
+																		"properties": {
+																			"system": {
+																				"type": "string"
+																			},
+																			"code": {
+																				"type": "string"
+																			},
+																			"display": {
+																				"type": "string"
+																			}
+																		}
+																	}
+																},
+																"text": {
+																	"type": "string"
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"request": {
+										"type": "object",
+										"properties": {
+											"method": {
+												"type": "string"
+											},
+											"url": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/junestorageregex')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/csv_hospital')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -326,6 +629,75 @@
 					"compressionCodec": "snappy"
 				},
 				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/final_combined')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Landing/patient",
+						"fileSystem": "healthcare-project"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "resourceType",
+						"type": "String"
+					},
+					{
+						"name": "Patientid",
+						"type": "String"
+					},
+					{
+						"name": "gender",
+						"type": "String"
+					},
+					{
+						"name": "birthDate",
+						"type": "String"
+					},
+					{
+						"name": "age_band",
+						"type": "String"
+					},
+					{
+						"name": "patient_ref",
+						"type": "String"
+					},
+					{
+						"name": "latest_claim_date",
+						"type": "String"
+					},
+					{
+						"name": "insurance_cover_display",
+						"type": "String"
+					},
+					{
+						"name": "claim_id",
+						"type": "String"
+					},
+					{
+						"name": "insurance_tier",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
@@ -782,309 +1154,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/localshir')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Json1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "junestorageregex",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "patient_json",
-						"fileSystem": "bigdata"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"resourceType": {
-							"type": "string"
-						},
-						"type": {
-							"type": "string"
-						},
-						"entry": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"fullUrl": {
-										"type": "string"
-									},
-									"resource": {
-										"type": "object",
-										"properties": {
-											"resourceType": {
-												"type": "string"
-											},
-											"id": {
-												"type": "string"
-											},
-											"meta": {
-												"type": "object",
-												"properties": {
-													"profile": {
-														"type": "array",
-														"items": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"text": {
-												"type": "object",
-												"properties": {
-													"status": {
-														"type": "string"
-													},
-													"div": {
-														"type": "string"
-													}
-												}
-											},
-											"extension": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"url": {
-															"type": "string"
-														},
-														"extension": {
-															"type": "array",
-															"items": {
-																"type": "object",
-																"properties": {
-																	"url": {
-																		"type": "string"
-																	},
-																	"valueCoding": {
-																		"type": "object",
-																		"properties": {
-																			"system": {
-																				"type": "string"
-																			},
-																			"code": {
-																				"type": "string"
-																			},
-																			"display": {
-																				"type": "string"
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											},
-											"identifier": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"system": {
-															"type": "string"
-														},
-														"value": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"name": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"use": {
-															"type": "string"
-														},
-														"family": {
-															"type": "string"
-														},
-														"given": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														},
-														"prefix": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														}
-													}
-												}
-											},
-											"telecom": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"system": {
-															"type": "string"
-														},
-														"value": {
-															"type": "string"
-														},
-														"use": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"gender": {
-												"type": "string"
-											},
-											"birthDate": {
-												"type": "string"
-											},
-											"deceasedDateTime": {
-												"type": "string"
-											},
-											"address": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"extension": {
-															"type": "array",
-															"items": {
-																"type": "object",
-																"properties": {
-																	"url": {
-																		"type": "string"
-																	},
-																	"extension": {
-																		"type": "array",
-																		"items": {
-																			"type": "object",
-																			"properties": {
-																				"url": {
-																					"type": "string"
-																				},
-																				"valueDecimal": {
-																					"type": "number"
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														},
-														"line": {
-															"type": "array",
-															"items": {
-																"type": "string"
-															}
-														},
-														"city": {
-															"type": "string"
-														},
-														"state": {
-															"type": "string"
-														},
-														"postalCode": {
-															"type": "string"
-														},
-														"country": {
-															"type": "string"
-														}
-													}
-												}
-											},
-											"maritalStatus": {
-												"type": "object",
-												"properties": {
-													"coding": {
-														"type": "array",
-														"items": {
-															"type": "object",
-															"properties": {
-																"system": {
-																	"type": "string"
-																},
-																"code": {
-																	"type": "string"
-																},
-																"display": {
-																	"type": "string"
-																}
-															}
-														}
-													},
-													"text": {
-														"type": "string"
-													}
-												}
-											},
-											"multipleBirthBoolean": {
-												"type": "boolean"
-											},
-											"communication": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"language": {
-															"type": "object",
-															"properties": {
-																"coding": {
-																	"type": "array",
-																	"items": {
-																		"type": "object",
-																		"properties": {
-																			"system": {
-																				"type": "string"
-																			},
-																			"code": {
-																				"type": "string"
-																			},
-																			"display": {
-																				"type": "string"
-																			}
-																		}
-																	}
-																},
-																"text": {
-																	"type": "string"
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									},
-									"request": {
-										"type": "object",
-										"properties": {
-											"method": {
-												"type": "string"
-											},
-											"url": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/junestorageregex')]"
 			]
 		},
 		{
@@ -1753,7 +1822,7 @@
 						"     broadcast: 'auto')~> join1",
 						"join1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['patient_insurance.csv'],",
+						"     filePattern:'$p_file',",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -1813,73 +1882,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/patient_insurance_flow')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/prescriber_extract')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "convert_mysql_to_parquet",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "MySqlSource"
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "mysql",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "mysql_to_parquet",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/mysql')]",
-				"[concat(variables('factoryId'), '/datasets/mysql_to_parquet')]"
 			]
 		}
 	]
