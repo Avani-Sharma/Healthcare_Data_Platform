@@ -99,7 +99,9 @@
 										"dataflow": {
 											"referenceName": "patient_insurance_flow",
 											"type": "DataFlowReference",
-											"parameters": {},
+											"parameters": {
+												"p_file": "'test.json'"
+											},
 											"datasetParameters": {
 												"PatientJSON": {
 													"FileName": {

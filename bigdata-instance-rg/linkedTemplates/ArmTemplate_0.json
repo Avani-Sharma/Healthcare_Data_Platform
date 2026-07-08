@@ -648,6 +648,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "   final_combined_patient_insurance.csv",
 						"folderPath": "Landing/patient",
 						"fileSystem": "healthcare-project"
 					},
@@ -1757,6 +1758,9 @@
 						}
 					],
 					"scriptLines": [
+						"parameters{",
+						"     p_file as string ('test.json')",
+						"}",
 						"source(output(",
 						"          resourceType as string,",
 						"          type as string,",
@@ -1822,7 +1826,7 @@
 						"     broadcast: 'auto')~> join1",
 						"join1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     filePattern:'$p_file',",
+						"     filePattern:( toString($p_file)),",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
