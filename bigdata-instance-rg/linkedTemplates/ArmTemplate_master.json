@@ -67,6 +67,10 @@
 			"type": "string",
 			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		},
+		"trigger_patient_new_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -156,6 +160,9 @@
 					},
 					"patient_triggers_properties_typeProperties_scope": {
 						"value": "[parameters('patient_triggers_properties_typeProperties_scope')]"
+					},
+					"trigger_patient_new_properties_typeProperties_scope": {
+						"value": "[parameters('trigger_patient_new_properties_typeProperties_scope')]"
 					}
 				}
 			},

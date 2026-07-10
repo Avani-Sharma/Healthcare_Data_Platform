@@ -14,6 +14,10 @@
 		"patient_triggers_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
+		},
+		"trigger_patient_new_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/fa4819a7-c495-4dd8-b805-bab36552a51f/resourceGroups/june-regex/providers/Microsoft.Storage/storageAccounts/junestoragereg"
 		}
 	},
 	"variables": {
@@ -96,8 +100,7 @@
 											"datasetParameters": {
 												"PatientJSON": {},
 												"sink1": {}
-											},
-											"linkedServiceParameters": {}
+											}
 										},
 										"staging": {},
 										"compute": {
@@ -248,7 +251,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -273,6 +276,35 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/patient_main_pipeline')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_patient_new')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "patient_dataflow_extract",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/bigdata/blobs/patient_json/",
+					"blobPathEndsWith": ".json",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trigger_patient_new_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }

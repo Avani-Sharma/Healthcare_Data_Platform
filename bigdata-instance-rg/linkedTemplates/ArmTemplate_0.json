@@ -1758,7 +1758,6 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     documentForm: 'singleDocument',",
-						"     wildcardPaths:['@dataset().FileName'],",
 						"     partitionBy('hash', 1)) ~> PatientJSON",
 						"PatientJSON foldDown(unroll(entry, entry),",
 						"     mapColumn(",
