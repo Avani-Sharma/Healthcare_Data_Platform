@@ -57,6 +57,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     FileName as string",
+				"}",
 				"source(output(",
 				"          resourceType as string,",
 				"          type as string,",
@@ -65,7 +68,9 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> PatientJSON",
+				"     documentForm: 'singleDocument',",
+				"     wildcardPaths:['@dataset().FileName'],",
+				"     partitionBy('hash', 1)) ~> PatientJSON",
 				"PatientJSON foldDown(unroll(entry, entry),",
 				"     mapColumn(",
 				"          resourceType = entry.resource.resourceType,",
