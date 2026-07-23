@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage2'"
 		},
+		"icd_azure_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'icd_azure'"
+		},
+		"icd_parquet_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'icd_parquet'"
+		},
 		"mysql_ls_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'mysql_ls'"
@@ -24,6 +32,14 @@
 			"defaultValue": "https://junestorage12.dfs.core.windows.net/"
 		},
 		"AzureDataLakeStorage2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://regexstorage1234.dfs.core.windows.net/"
+		},
+		"icd_azure_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://junestorage12.dfs.core.windows.net/"
+		},
+		"icd_parquet_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://regexstorage1234.dfs.core.windows.net/"
 		},
@@ -72,6 +88,12 @@
 					"AzureDataLakeStorage2_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage2_accountKey')]"
 					},
+					"icd_azure_accountKey": {
+						"value": "[parameters('icd_azure_accountKey')]"
+					},
+					"icd_parquet_accountKey": {
+						"value": "[parameters('icd_parquet_accountKey')]"
+					},
 					"mysql_ls_password": {
 						"value": "[parameters('mysql_ls_password')]"
 					},
@@ -80,6 +102,12 @@
 					},
 					"AzureDataLakeStorage2_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage2_properties_typeProperties_url')]"
+					},
+					"icd_azure_properties_typeProperties_url": {
+						"value": "[parameters('icd_azure_properties_typeProperties_url')]"
+					},
+					"icd_parquet_properties_typeProperties_url": {
+						"value": "[parameters('icd_parquet_properties_typeProperties_url')]"
 					},
 					"mysql_ls_properties_typeProperties_server": {
 						"value": "[parameters('mysql_ls_properties_typeProperties_server')]"

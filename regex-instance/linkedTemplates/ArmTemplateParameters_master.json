@@ -11,6 +11,12 @@
 		"AzureDataLakeStorage2_accountKey": {
 			"value": ""
 		},
+		"icd_azure_accountKey": {
+			"value": ""
+		},
+		"icd_parquet_accountKey": {
+			"value": ""
+		},
 		"mysql_ls_password": {
 			"value": ""
 		},
@@ -18,6 +24,12 @@
 			"value": "https://junestorage12.dfs.core.windows.net/"
 		},
 		"AzureDataLakeStorage2_properties_typeProperties_url": {
+			"value": "https://regexstorage1234.dfs.core.windows.net/"
+		},
+		"icd_azure_properties_typeProperties_url": {
+			"value": "https://junestorage12.dfs.core.windows.net/"
+		},
+		"icd_parquet_properties_typeProperties_url": {
 			"value": "https://regexstorage1234.dfs.core.windows.net/"
 		},
 		"mysql_ls_properties_typeProperties_server": {

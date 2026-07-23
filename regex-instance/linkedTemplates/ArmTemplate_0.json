@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage2'"
 		},
+		"icd_azure_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'icd_azure'"
+		},
+		"icd_parquet_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'icd_parquet'"
+		},
 		"mysql_ls_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'mysql_ls'"
@@ -24,6 +32,14 @@
 			"defaultValue": "https://junestorage12.dfs.core.windows.net/"
 		},
 		"AzureDataLakeStorage2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://regexstorage1234.dfs.core.windows.net/"
+		},
+		"icd_azure_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://junestorage12.dfs.core.windows.net/"
+		},
+		"icd_parquet_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://regexstorage1234.dfs.core.windows.net/"
 		},
@@ -79,6 +95,40 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/icd_azure')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('icd_azure_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('icd_azure_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/icd_parquet')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('icd_parquet_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('icd_parquet_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/localshir')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -89,12 +139,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/txt_icd')]",
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
+					"referenceName": "icd_azure",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -106,9 +156,9 @@
 						"folderPath": "icd_txt",
 						"fileSystem": "bigdata"
 					},
-					"columnDelimiter": "\t",
+					"columnDelimiter": ",",
 					"escapeChar": "\\",
-					"firstRowAsHeader": false,
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
@@ -123,16 +173,16 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/icd_azure')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/txt_to_parquet_icd')]",
+			"name": "[concat(parameters('factoryName'), '/Parquet1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage2",
+					"referenceName": "icd_parquet",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -140,7 +190,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "Landing/icd",
+						"folderPath": "landing/icd",
 						"fileSystem": "healthcare-project"
 					},
 					"compressionCodec": "snappy"
@@ -148,7 +198,7 @@
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage2')]"
+				"[concat(variables('factoryId'), '/linkedServices/icd_parquet')]"
 			]
 		},
 		{
@@ -180,13 +230,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/icd_extract')]",
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "convert_txt_to_parquet",
+						"name": "Copy data1",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -221,28 +271,6 @@
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 1
-										},
-										"sink": {
-											"name": "icd_code",
-											"physicalType": "UTF8"
-										}
-									},
-									{
-										"source": {
-											"type": "String",
-											"ordinal": 2
-										},
-										"sink": {
-											"name": "description",
-											"physicalType": "UTF8"
-										}
-									}
-								],
 								"typeConversion": true,
 								"typeConversionSettings": {
 									"allowDataTruncation": true,
@@ -252,14 +280,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "txt_icd",
+								"referenceName": "DelimitedText1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "txt_to_parquet_icd",
+								"referenceName": "Parquet1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -272,8 +300,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/txt_icd')]",
-				"[concat(variables('factoryId'), '/datasets/txt_to_parquet_icd')]"
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet1')]"
 			]
 		}
 	]
