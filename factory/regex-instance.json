@@ -1,0 +1,15 @@
+{
+	"name": "regex-instance",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "216f29d6-cde3-4db5-b1cb-4d34c91d63d7",
+		"tenantId": "b3611940-a540-4992-9bf1-c5920af914d1"
+	}
+}
