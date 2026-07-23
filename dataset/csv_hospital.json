@@ -1,10 +1,6 @@
 {
 	"name": "csv_hospital",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "junestorageregex",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

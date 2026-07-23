@@ -1,10 +1,6 @@
 {
 	"name": "Parquet1",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage3",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {

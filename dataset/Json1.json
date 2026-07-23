@@ -1,10 +1,6 @@
 {
 	"name": "Json1",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "junestorageregex",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
