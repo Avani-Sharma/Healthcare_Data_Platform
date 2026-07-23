@@ -1,10 +1,6 @@
 {
 	"name": "patient_json_csv",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorage1",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
