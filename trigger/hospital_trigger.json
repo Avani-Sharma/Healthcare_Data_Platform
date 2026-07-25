@@ -1,0 +1,25 @@
+{
+	"name": "hospital_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "hospital_extract",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/bigdata/blobs/hospital_csv/",
+			"blobPathEndsWith": ".csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/a433202d-a154-473c-bd44-1cdfd6212ecd/resourceGroups/june-rg/providers/Microsoft.Storage/storageAccounts/junestorage12",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

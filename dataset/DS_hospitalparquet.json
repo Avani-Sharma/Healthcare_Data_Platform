@@ -1,0 +1,21 @@
+{
+	"name": "DS_hospitalparquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_icdparquet",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "landing/hospital",
+				"fileSystem": "healthcare-project"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

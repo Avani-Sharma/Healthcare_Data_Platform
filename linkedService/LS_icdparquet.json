@@ -1,0 +1,12 @@
+{
+	"name": "LS_icdparquet",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://regexstorage1234.dfs.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEQ4NTdENTc3LTlEMkItNDQ4Qi04REVFLTUzRTczNzUyMDgwNV9lMmU2MDU2NC05YWE4LTRhYjAtOWYyZC0zZDY3ODM1ZmU1NGUiDQp9"
+		}
+	}
+}

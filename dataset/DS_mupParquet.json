@@ -1,0 +1,21 @@
+{
+	"name": "DS_mupParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Mup_parquet",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "landing/prescriber",
+				"fileSystem": "healthcare-project"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
