@@ -1,0 +1,41 @@
+USE DATABASE healthcare_db;
+
+CREATE SCHEMA IF NOT EXISTS GOLD;
+
+CREATE OR REPLACE VIEW GOLD.AGG_DRUGSPENDBYSPECIALTY AS
+SELECT
+    d.YEAR,
+    d.QUARTER,
+    p.SPECIALTY,
+    SUM(f.DRUG_COST) AS TOTAL_DRUG_COST,
+    COUNT(*) AS TOTAL_PRESCRIPTIONS
+FROM SILVER.FACT_DRUG_SPEND f
+JOIN SILVER.DIM_PHYSICIAN p
+ON f.PHYSICIAN_ID = p.PHYSICIAN_ID
+JOIN SILVER.DIM_DATE d
+ON f.DATE_KEY = d.DATE_KEY
+GROUP BY
+d.YEAR,
+d.QUARTER,
+p.SPECIALTY;
+
+select * from GOLD.AGG_DRUGSPENDBYSPECIALTY;
+
+CREATE OR REPLACE VIEW GOLD.AGG_DRUGSPENDBYSPECIALTY AS
+SELECT
+    d.year,
+    d.quarter,
+    p.prscrbr_type,
+    SUM(f.total_drug_cost) AS total_drug_spend,
+    SUM(f.total_claims) AS total_claims,
+    SUM(f.total_benes) AS total_beneficiaries
+FROM SILVER.FACT_DRUG_SPEND f
+JOIN SILVER.DIM_PHYSICIAN p
+ON f.physician_sk = p.physician_sk
+JOIN SILVER.DIM_DATE d
+ON f.date_sk = d.date_sk
+WHERE p.is_current = 1
+GROUP BY
+d.year,
+d.quarter,
+p.prscrbr_type;
